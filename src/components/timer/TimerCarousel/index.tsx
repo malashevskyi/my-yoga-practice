@@ -44,6 +44,9 @@ export function TimerCarousel() {
           const isActive = index === activeTimerIndex;
           const isPast = index < activeTimerIndex;
 
+          // Don't render past timers - they're in history now
+          if (isPast) return null;
+
           // Calculate vertical offset with tighter spacing (in vh units)
           const offset = (index - activeTimerIndex) * 30; // 30vh spacing (tighter)
 
@@ -103,21 +106,6 @@ export function TimerCarousel() {
                 >
                   {isActive ? formatTime(timeLeft) : formatTime(step.duration)}
                 </Typography>
-
-                {/* Status indicator for past items */}
-                {isPast && (
-                  <Typography
-                    variant="caption"
-                    color="success.main"
-                    sx={{
-                      mt: 0.5,
-                      fontSize: "1.5vh",
-                      transition: "all 0.3s ease",
-                    }}
-                  >
-                    ✓ Complete
-                  </Typography>
-                )}
               </Box>
             </motion.div>
           );

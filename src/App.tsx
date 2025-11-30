@@ -1,6 +1,7 @@
 import { Box, Button } from "@mui/material";
 import { ThemeSwitcher } from "./components/core/ThemeSwitcher";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
+import { AppDrawer } from "./components/layout/AppDrawer";
 import { GlobalProgress } from "./components/timer/GlobalProgress";
 import { TimerCarousel } from "./components/timer/TimerCarousel";
 import { TimerControls } from "./components/timer/TimerControls";
@@ -49,6 +50,7 @@ function App() {
           gap: 1,
         }}
       >
+        <AppDrawer />
         <ThemeSwitcher />
         <LanguageSwitcher />
       </Box>

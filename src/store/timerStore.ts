@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { TimerStep, TimerStatus } from "../types/timer";
+import { useHistoryStore } from "./historyStore";
 
 interface TimerStore {
   queue: TimerStep[];
@@ -38,6 +39,9 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
   isTransitioning: false,
 
   setQueue: (steps) => {
+    // Start a new session when loading new timers
+    useHistoryStore.getState().startSession();
+
     set({
       queue: steps,
       activeTimerIndex: 0,
@@ -181,6 +185,9 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
           hasMoreSteps ? "TWO" : "ONE"
         } gong(s)!`,
       );
+
+      // Add completed timer to history
+      useHistoryStore.getState().addCompletedTimer(currentStep);
 
       // ALWAYS play gong first and mark as transitioning
       // Add timestamp to force new gong even if same file
