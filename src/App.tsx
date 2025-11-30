@@ -1,6 +1,6 @@
 import { Box, Container } from "@mui/material";
-import { ThemeDemo } from "./components/ThemeDemo";
-import { TimerDebug } from "./components/TimerDebug";
+import { ThemeDemo } from "./components/core/ThemeDemo/index.tsx";
+import { TimerDebug } from "./components/debug/TimerDebug";
 
 function App() {
   return (

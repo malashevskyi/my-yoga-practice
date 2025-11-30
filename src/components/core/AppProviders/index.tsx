@@ -1,6 +1,6 @@
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { useThemeStore } from "../store/themeStore";
-import { lightTheme, darkTheme } from "../theme/theme";
+import { useThemeStore } from "../../../store/themeStore";
+import { lightTheme, darkTheme } from "../../../theme/theme";
 
 interface AppProvidersProps {
   children: React.ReactNode;

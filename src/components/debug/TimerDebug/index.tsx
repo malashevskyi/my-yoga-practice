@@ -10,9 +10,9 @@ import {
   FormControlLabel,
 } from "@mui/material";
 import { PlayArrow, Pause, Replay, SkipNext, Add } from "@mui/icons-material";
-import { useTimerStore } from "../store/timerStore";
-import { useTimerEngine } from "../hooks/useTimerEngine";
-import type { TimerStep } from "../types/timer";
+import { useTimerStore } from "../../../store/timerStore";
+import { useTimerEngine } from "../../../hooks/useTimerEngine";
+import type { TimerStep } from "../../../types/timer";
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);

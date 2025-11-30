@@ -1,7 +1,7 @@
 import { Box, Typography, Stack, Paper } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { ThemeSwitcher } from "./ThemeSwitcher";
+import { LanguageSwitcher } from "../LanguageSwitcher";
+import { ThemeSwitcher } from "../ThemeSwitcher";
 
 export function ThemeDemo() {
   const { t } = useTranslation();

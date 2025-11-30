@@ -1,6 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AppProviders } from "./components/AppProviders";
+import { AppProviders } from "./components/core/AppProviders/index.tsx";
 import "./i18n";
 import "./index.css";
 import App from "./App.tsx";
