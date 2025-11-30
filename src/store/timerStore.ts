@@ -90,6 +90,9 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
         totalProgress: 0,
         startTime: null,
         pausedTime: 0,
+        status: "paused",
+        isTransitioning: false,
+        gongToPlay: null,
       });
     }
   },
