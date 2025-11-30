@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Drawer, IconButton, Box, Tabs, Tab, Typography } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { HistoryList } from "../../history/HistoryList";
+import { PresetsList } from "../../presets/PresetsList";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -73,21 +74,19 @@ export function AppDrawer() {
           {/* Tabs */}
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs value={tabValue} onChange={handleTabChange} centered>
+              <Tab label="Presets" />
               <Tab label="History" />
-              <Tab label="Presets" disabled />
             </Tabs>
           </Box>
 
-          {/* History Tab */}
+          {/* Presets Tab */}
           <TabPanel value={tabValue} index={0}>
-            <HistoryList />
+            <PresetsList />
           </TabPanel>
 
-          {/* Presets Tab (placeholder) */}
+          {/* History Tab */}
           <TabPanel value={tabValue} index={1}>
-            <Typography variant="body2" color="text.secondary" align="center">
-              Presets coming soon...
-            </Typography>
+            <HistoryList />
           </TabPanel>
         </Box>
       </Drawer>
