@@ -12,6 +12,7 @@ import {
 import { PlayArrow, Pause, Replay, SkipNext, Add } from "@mui/icons-material";
 import { useTimerStore } from "../../../store/timerStore";
 import { useTimerEngine } from "../../../hooks/useTimerEngine";
+import { GongPlayer } from "../../audio/GongPlayer";
 import type { TimerStep } from "../../../types/timer";
 
 function formatTime(seconds: number): string {
@@ -33,6 +34,7 @@ export function TimerDebug() {
   const status = useTimerStore((state) => state.status);
   const isLooping = useTimerStore((state) => state.isLooping);
   const totalProgress = useTimerStore((state) => state.totalProgress);
+  const gongToPlay = useTimerStore((state) => state.gongToPlay);
 
   // Get store actions
   const setQueue = useTimerStore((state) => state.setQueue);
@@ -48,19 +50,25 @@ export function TimerDebug() {
     const testSteps: TimerStep[] = [
       {
         id: crypto.randomUUID(),
-        duration: 5,
+        duration: 3,
         label: "Warm Up",
         type: "timer",
       },
       {
         id: crypto.randomUUID(),
-        duration: 3,
+        duration: 25,
         label: "Break",
         type: "break",
       },
       {
         id: crypto.randomUUID(),
-        duration: 5,
+        duration: 25,
+        label: "Break",
+        type: "break",
+      },
+      {
+        id: crypto.randomUUID(),
+        duration: 15,
         label: "Cool Down",
         type: "timer",
       },
@@ -217,6 +225,9 @@ export function TimerDebug() {
           </Paper>
         </Stack>
       </Paper>
+
+      {/* Gong Player */}
+      {gongToPlay && <GongPlayer src={gongToPlay} autoPlay />}
     </Box>
   );
 }

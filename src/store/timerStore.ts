@@ -10,6 +10,8 @@ interface TimerStore {
   totalProgress: number;
   startTime: number | null; // Timestamp when current step started
   pausedTime: number; // Accumulated paused time
+  gongToPlay: string | null; // URL of gong to play
+  isTransitioning: boolean; // True during 3-second pause between timers
 
   // Actions
   setQueue: (steps: TimerStep[]) => void;
@@ -19,6 +21,7 @@ interface TimerStore {
   skipNext: () => void;
   updateTime: () => void; // Renamed from tick - updates based on real time
   setIsLooping: (value: boolean) => void;
+  clearGong: () => void;
 }
 
 export const useTimerStore = create<TimerStore>((set, get) => ({
@@ -30,6 +33,8 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
   totalProgress: 0,
   startTime: null,
   pausedTime: 0,
+  gongToPlay: null,
+  isTransitioning: false,
 
   setQueue: (steps) => {
     set({
@@ -133,9 +138,11 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
       isLooping,
       startTime,
       pausedTime,
+      isTransitioning,
     } = get();
 
-    if (status !== "running" || !startTime) return;
+    // Don't update if paused, not started, or transitioning between timers
+    if (status !== "running" || !startTime || isTransitioning) return;
 
     const currentStep = queue[activeTimerIndex];
     if (!currentStep) return;
@@ -155,39 +162,84 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
 
     // Check if step is complete
     if (newTimeLeft === 0) {
-      console.log("🔔 GONG!");
-
       const nextIndex = activeTimerIndex + 1;
+      const hasMoreSteps = nextIndex < queue.length || isLooping;
+
+      // Determine which gong to play:
+      // - two-gongs.mp3: after each timer except the last one
+      // - one-gong.mp3: after the very last timer
+      const gongUrl = hasMoreSteps
+        ? "/gongs/two-gongs.mp3"
+        : "/gongs/one-gong.mp3";
+
+      console.log(
+        `🔔 Timer ${activeTimerIndex + 1} complete! Playing ${
+          hasMoreSteps ? "TWO" : "ONE"
+        } gong(s)!`,
+      );
+
+      // ALWAYS play gong first and mark as transitioning
+      // Add timestamp to force new gong even if same file
+      const gongUrlWithTimestamp = `${gongUrl}?t=${Date.now()}`;
+
+      set({
+        gongToPlay: gongUrlWithTimestamp,
+        isTransitioning: true,
+        timeLeft: 0, // Keep it at 0 during transition
+      });
 
       if (nextIndex < queue.length) {
-        // Move to next step
-        set({
-          activeTimerIndex: nextIndex,
-          timeLeft: queue[nextIndex].duration,
-          totalProgress: 0,
-          startTime: Date.now(),
-          pausedTime: 0,
-        });
+        // Move to next step after 3 second pause
+        setTimeout(() => {
+          const currentState = get();
+          // Only proceed if we're still on the same step (user didn't skip/reset)
+          if (
+            currentState.activeTimerIndex === activeTimerIndex &&
+            currentState.isTransitioning
+          ) {
+            set({
+              activeTimerIndex: nextIndex,
+              timeLeft: queue[nextIndex].duration,
+              totalProgress: 0,
+              startTime: Date.now(),
+              pausedTime: 0,
+              // DON'T clear gongToPlay - let it finish playing
+              isTransitioning: false,
+            });
+          }
+        }, 3000); // 3 second pause between timers
       } else {
         // End of queue
         if (isLooping && queue.length > 0) {
-          // Loop back to start
+          // Loop back to start after 3 second pause
           console.log("🔁 Looping back to start");
-          set({
-            activeTimerIndex: 0,
-            timeLeft: queue[0].duration,
-            totalProgress: 0,
-            startTime: Date.now(),
-            pausedTime: 0,
-          });
+
+          setTimeout(() => {
+            const currentState = get();
+            if (
+              currentState.activeTimerIndex === activeTimerIndex &&
+              currentState.isTransitioning
+            ) {
+              set({
+                activeTimerIndex: 0,
+                timeLeft: queue[0].duration,
+                totalProgress: 0,
+                startTime: Date.now(),
+                pausedTime: 0,
+                // DON'T clear gongToPlay - let it finish playing
+                isTransitioning: false,
+              });
+            }
+          }, 3000);
         } else {
-          // Complete
+          // Complete - keep gong playing, don't clear it
           console.log("✅ Timer completed!");
           set({
             status: "completed",
             totalProgress: 100,
             startTime: null,
             pausedTime: 0,
+            isTransitioning: false,
           });
         }
       }
@@ -196,5 +248,9 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
 
   setIsLooping: (value) => {
     set({ isLooping: value });
+  },
+
+  clearGong: () => {
+    set({ gongToPlay: null });
   },
 }));
