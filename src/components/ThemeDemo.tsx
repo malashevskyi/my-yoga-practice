@@ -1,10 +1,9 @@
-import { Box, Button, Typography, Stack, Paper } from "@mui/material";
+import { Box, Typography, Stack, Paper } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useThemeStore } from "../store/themeStore";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 export function ThemeDemo() {
-  const { mode, toggleTheme } = useThemeStore();
   const { t } = useTranslation();
 
   return (
@@ -17,6 +16,7 @@ export function ThemeDemo() {
         }}
       >
         <Stack direction="row" spacing={1}>
+          <ThemeSwitcher />
           <LanguageSwitcher />
         </Stack>
       </Box>
@@ -24,9 +24,6 @@ export function ThemeDemo() {
       <Typography variant="h3" component="h1" gutterBottom>
         {t("title")}
       </Typography>
-      <Button variant="contained" onClick={toggleTheme} size="large">
-        {t("toggleTheme")} ({t("currentTheme")}: {mode})
-      </Button>
     </Paper>
   );
 }
