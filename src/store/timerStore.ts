@@ -18,6 +18,7 @@ interface TimerStore {
   start: () => void;
   pause: () => void;
   resetCurrent: () => void;
+  clearAll: () => void; // Clear all timers and reset to initial state
   skipNext: () => void;
   updateTime: () => void; // Renamed from tick - updates based on real time
   setIsLooping: (value: boolean) => void;
@@ -255,5 +256,19 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
 
   clearGong: () => {
     set({ gongToPlay: null });
+  },
+
+  clearAll: () => {
+    set({
+      queue: [],
+      activeTimerIndex: 0,
+      timeLeft: 0,
+      status: "idle",
+      totalProgress: 0,
+      startTime: null,
+      pausedTime: 0,
+      isTransitioning: false,
+      gongToPlay: null,
+    });
   },
 }));

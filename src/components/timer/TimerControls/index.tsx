@@ -1,5 +1,11 @@
 import { Box, IconButton } from "@mui/material";
-import { PlayArrow, Pause, Refresh, SkipNext } from "@mui/icons-material";
+import {
+  PlayArrow,
+  Pause,
+  Refresh,
+  SkipNext,
+  Clear,
+} from "@mui/icons-material";
 import { useTimerStore } from "../../../store/timerStore";
 
 export function TimerControls() {
@@ -8,6 +14,7 @@ export function TimerControls() {
   const start = useTimerStore((state) => state.start);
   const pause = useTimerStore((state) => state.pause);
   const resetCurrent = useTimerStore((state) => state.resetCurrent);
+  const clearAll = useTimerStore((state) => state.clearAll);
   const skipNext = useTimerStore((state) => state.skipNext);
 
   const hasTimers = queue.length > 0;
@@ -92,6 +99,28 @@ export function TimerControls() {
         }}
       >
         <SkipNext sx={{ fontSize: 32 }} />
+      </IconButton>
+
+      {/* Clear All */}
+      <IconButton
+        onClick={clearAll}
+        disabled={!hasTimers}
+        size="large"
+        sx={{
+          width: 56,
+          height: 56,
+          bgcolor: "action.hover",
+          color: "error.main",
+          "&:hover": {
+            bgcolor: "error.light",
+            color: "error.contrastText",
+          },
+          "&:disabled": {
+            bgcolor: "action.disabledBackground",
+          },
+        }}
+      >
+        <Clear sx={{ fontSize: 32 }} />
       </IconButton>
     </Box>
   );
