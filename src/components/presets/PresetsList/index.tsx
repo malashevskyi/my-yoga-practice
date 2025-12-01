@@ -14,7 +14,7 @@ import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { usePresets } from "../../../hooks/usePresets";
 import { useTimerStore } from "../../../store/timerStore";
-import { formatTime } from "../../../utils/time";
+import { formatTime } from "../../../utils/formatTime";
 import { isDevMode } from "../../../lib/supabase";
 import { useState } from "react";
 import type { TimerStep } from "../../../types/timer";

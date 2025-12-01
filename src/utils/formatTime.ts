@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 /**
  * Formats seconds into MM:SS or HH:MM:SS format
  * @param seconds - Number of seconds to format
@@ -8,13 +10,11 @@ export function formatTime(seconds: number): string {
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
 
-  const minutesStr = minutes.toString().padStart(2, "0");
-  const secondsStr = secs.toString().padStart(2, "0");
+  const date = new Date(0, 0, 0, hours, minutes, secs);
 
   if (hours > 0) {
-    const hoursStr = hours.toString().padStart(2, "0");
-    return `${hoursStr}:${minutesStr}:${secondsStr}`;
+    return format(date, "HH:mm:ss");
   }
 
-  return `${minutesStr}:${secondsStr}`;
+  return format(date, "mm:ss");
 }

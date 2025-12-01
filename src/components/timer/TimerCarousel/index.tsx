@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTimerStore } from "../../../store/timerStore";
-import { formatTime } from "../../../utils/time";
+import { formatTime } from "../../../utils/formatTime";
 import { VerticalScrollWrapper } from "../../shared/VerticalScrollWrapper";
 import { getFontSize } from "./utils/getForntSize";
 

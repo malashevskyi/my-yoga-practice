@@ -3,6 +3,7 @@ import { ThemeSwitcher } from "./components/core/ThemeSwitcher";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
 import { AppDrawer } from "./components/layout/AppDrawer";
 import { GlobalProgress } from "./components/timer/GlobalProgress";
+import { CurrentTime } from "./components/timer/CurrentTime";
 import { TimerCarousel } from "./components/timer/TimerCarousel";
 import { TimerControls } from "./components/timer/TimerControls";
 import { GongPlayer } from "./components/audio/GongPlayer";
@@ -42,6 +43,9 @@ function App() {
         <ThemeSwitcher />
         <LanguageSwitcher />
       </Box>
+
+      {/* Current Time with Yoga Period Indicator */}
+      <CurrentTime />
 
       {/* Main Timer Carousel */}
       <TimerCarousel />

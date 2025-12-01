@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import { useHistoryStore } from "../../../store/historyStore";
-import { formatTime } from "../../../utils/time";
+import { formatTime } from "../../../utils/formatTime";
 
 export function HistoryList() {
   const sessions = useHistoryStore((state) => state.sessions);
