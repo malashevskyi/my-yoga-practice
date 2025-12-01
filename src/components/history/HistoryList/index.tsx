@@ -80,29 +80,19 @@ export function HistoryList() {
                   Session: {formatDate(session.startedAt)}
                 </Typography>
                 <Divider sx={{ my: 1 }} />
-                {session.completedTimers.length === 0 ? (
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ px: 2, py: 1 }}
-                  >
-                    No timers completed in this session.
-                  </Typography>
-                ) : (
-                  session.completedTimers.map((timer) => (
-                    <ListItem key={timer.id}>
-                      <ListItemText
-                        primary={timer.step.label}
-                        secondary={`${formatTime(
-                          timer.step.duration,
-                        )} • ${formatDate(timer.completedAt)}`}
-                        primaryTypographyProps={{
-                          fontWeight: 500,
-                        }}
-                      />
-                    </ListItem>
-                  ))
-                )}
+                {session.completedTimers.map((timer) => (
+                  <ListItem key={timer.id}>
+                    <ListItemText
+                      primary={timer.step.label}
+                      secondary={`${formatTime(
+                        timer.step.duration,
+                      )} • ${formatDate(timer.completedAt)}`}
+                      primaryTypographyProps={{
+                        fontWeight: 500,
+                      }}
+                    />
+                  </ListItem>
+                ))}
               </Box>
             ))}
         </List>

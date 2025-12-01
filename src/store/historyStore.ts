@@ -8,7 +8,6 @@ interface HistoryStore {
   currentSessionId: string | null;
 
   // Actions
-  startSession: () => void;
   addCompletedTimer: (step: TimerStep) => void;
   clearHistory: () => void;
   getRecentTimers: (limit?: number) => CompletedTimer[];
@@ -20,31 +19,38 @@ export const useHistoryStore = create<HistoryStore>()(
       sessions: [],
       currentSessionId: null,
 
-      startSession: () => {
-        const sessionId = `session-${Date.now()}-${Math.random()
-          .toString(36)
-          .substr(2, 9)}`;
-        const newSession: TimerSession = {
-          id: sessionId,
-          startedAt: Date.now(),
-          completedTimers: [],
-        };
-
-        set({
-          currentSessionId: sessionId,
-          sessions: [...get().sessions, newSession],
-        });
-      },
-
       addCompletedTimer: (step: TimerStep) => {
         const { currentSessionId, sessions } = get();
 
+        // Create a new session if none exists
         if (!currentSessionId) {
-          // Start a new session if none exists
-          get().startSession();
-          return get().addCompletedTimer(step);
+          const sessionId = `session-${Date.now()}-${Math.random()
+            .toString(36)
+            .substr(2, 9)}`;
+
+          const completedTimer: CompletedTimer = {
+            id: `timer-${Date.now()}-${Math.random()
+              .toString(36)
+              .substr(2, 9)}`,
+            step,
+            completedAt: Date.now(),
+            sessionId,
+          };
+
+          const newSession: TimerSession = {
+            id: sessionId,
+            startedAt: Date.now(),
+            completedTimers: [completedTimer],
+          };
+
+          set({
+            currentSessionId: sessionId,
+            sessions: [...sessions, newSession],
+          });
+          return;
         }
 
+        // Add timer to existing session
         const completedTimer: CompletedTimer = {
           id: `timer-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           step,

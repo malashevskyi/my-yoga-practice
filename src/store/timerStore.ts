@@ -39,9 +39,6 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
   isTransitioning: false,
 
   setQueue: (steps) => {
-    // Start a new session when loading new timers
-    useHistoryStore.getState().startSession();
-
     set({
       queue: steps,
       activeTimerIndex: 0,
