@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/time";
 import { VerticalScrollWrapper } from "../../shared/VerticalScrollWrapper";
+import { getFontSize } from "./utils/getForntSize";
 
 const ACTIVE_TIMER_HEIGHT_VH = 30;
 
@@ -45,6 +46,10 @@ export function TimerCarousel() {
 
           // Calculate vertical offset with tighter spacing (in vh units)
           const offset = (index - activeTimerIndex) * ACTIVE_TIMER_HEIGHT_VH;
+
+          const timeString = isActive
+            ? formatTime(timeLeft)
+            : formatTime(step.duration);
 
           return (
             <motion.div
@@ -94,8 +99,9 @@ export function TimerCarousel() {
                     fontVariantNumeric: "tabular-nums",
                     letterSpacing: isActive ? "-0.02em" : "normal",
                     transition: "all 0.3s ease",
-                    fontSize: isActive ? "33vh" : "25vh",
+                    fontSize: getFontSize(isActive, timeString.length),
                     lineHeight: 1,
+                    maxWidth: "100vw",
                     color: isActive ? "text.primary" : "text.disabled",
                   }}
                 >
