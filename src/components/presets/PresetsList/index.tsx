@@ -8,8 +8,9 @@ import {
   CircularProgress,
   Alert,
   Button,
+  IconButton,
 } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { usePresets } from "../../../hooks/usePresets";
 import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/time";
@@ -17,15 +18,24 @@ import { isDevMode } from "../../../lib/supabase";
 import { useState } from "react";
 import type { TimerStep } from "../../../types/timer";
 import { CreatePresetDialog } from "../CreatePresetDialog";
+import { useDeletePreset } from "../../../hooks/useDeletePreset";
 
 export function PresetsList() {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const setQueue = useTimerStore((state) => state.setQueue);
 
   const { data: presets, isLoading, error } = usePresets();
+  const deleteMutation = useDeletePreset();
 
   const handleSelectPreset = (presetSteps: TimerStep[]) => {
     setQueue(presetSteps);
+  };
+
+  const handleDeletePreset = (e: React.MouseEvent, presetId: string) => {
+    e.stopPropagation();
+    if (confirm("Are you sure you want to delete this preset?")) {
+      deleteMutation.mutate(presetId);
+    }
   };
 
   if (isLoading) {
@@ -77,7 +87,22 @@ export function PresetsList() {
       ) : (
         <List>
           {presets.map((preset) => (
-            <ListItem key={preset.id} disablePadding>
+            <ListItem
+              key={preset.id}
+              disablePadding
+              secondaryAction={
+                isDevMode && (
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={(e) => handleDeletePreset(e, preset.id)}
+                    disabled={deleteMutation.isPending}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                )
+              }
+            >
               <ListItemButton onClick={() => handleSelectPreset(preset.steps)}>
                 <ListItemText
                   primary={preset.name}

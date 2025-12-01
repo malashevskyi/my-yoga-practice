@@ -11,20 +11,21 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { Formik, Form } from "formik";
-import { useCreatePreset } from "../../../hooks/usePresets";
 import { PresetBasicInfo } from "../PresetBasicInfo";
 import { PresetStepsList } from "../PresetStepsList";
-import { createDefaultStep, validatePresetForm, type PresetFormValues } from "./utils";
+import {
+  createDefaultStep,
+  validatePresetForm,
+  type PresetFormValues,
+} from "./utils";
+import { useCreatePreset } from "../../../hooks/useCreatePreset";
 
 interface CreatePresetDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
-export function CreatePresetDialog({
-  open,
-  onClose,
-}: CreatePresetDialogProps) {
+export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
   const mutation = useCreatePreset();
 
   const initialValues: PresetFormValues = {
@@ -44,7 +45,7 @@ export function CreatePresetDialog({
         onSuccess: () => {
           onClose();
         },
-      }
+      },
     );
   };
 
@@ -59,7 +60,11 @@ export function CreatePresetDialog({
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
           <Form>
             <DialogTitle>
-              <Box display="flex" justifyContent="space-between" alignItems="center">
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+              >
                 <Typography variant="h6">Create New Preset</Typography>
                 <IconButton onClick={onClose} size="small">
                   <CloseIcon />
@@ -88,11 +93,13 @@ export function CreatePresetDialog({
 
               <PresetStepsList
                 steps={values.steps}
-                onAddStep={() => setFieldValue("steps", [...values.steps, createDefaultStep()])}
+                onAddStep={() =>
+                  setFieldValue("steps", [...values.steps, createDefaultStep()])
+                }
                 onRemoveStep={(index) =>
                   setFieldValue(
                     "steps",
-                    values.steps.filter((_, i) => i !== index)
+                    values.steps.filter((_, i) => i !== index),
                   )
                 }
                 onStepChange={(index, field, value) => {
@@ -117,11 +124,7 @@ export function CreatePresetDialog({
               <Button onClick={onClose} disabled={isSubmitting}>
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                disabled={isSubmitting}
-              >
+              <Button type="submit" variant="contained" disabled={isSubmitting}>
                 {isSubmitting ? "Creating..." : "Create Preset"}
               </Button>
             </DialogActions>

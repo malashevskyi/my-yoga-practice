@@ -47,3 +47,17 @@ export async function createPreset(input: CreatePresetInput): Promise<Preset> {
 
   return data as PresetRow;
 }
+
+export async function deletePreset(id: string): Promise<void> {
+  if (!isDevMode) {
+    throw new Error("Admin access required to delete presets");
+  }
+
+  const client = getSupabaseAdmin();
+
+  const { error } = await client.from("presets").delete().eq("id", id);
+
+  if (error) {
+    throw new Error(`Failed to delete preset: ${error.message}`);
+  }
+}
