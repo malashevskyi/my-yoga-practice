@@ -3,5 +3,43 @@
   "settings": "Settings",
   "language": "Language",
   "toggleTheme": "Toggle Theme",
-  "currentTheme": "Current theme"
+  "currentTheme": "Current theme",
+  "menu": {
+    "title": "Menu",
+    "presets": "Presets",
+    "history": "History"
+  },
+  "presets": {
+    "title": "Available Presets",
+    "create": "Create",
+    "delete": "Delete",
+    "noPresets": "No presets available yet.",
+    "steps": "steps",
+    "total": "Total",
+    "deleteConfirm": "Are you sure you want to delete this preset?",
+    "loadingError": "Failed to load presets"
+  },
+  "createPreset": {
+    "title": "Create New Preset",
+    "name": "Preset Name",
+    "description": "Description (optional)",
+    "cancel": "Cancel",
+    "create": "Create Preset",
+    "creating": "Creating...",
+    "nameRequired": "Preset name is required",
+    "stepsInvalid": "All steps must have a label and duration > 0"
+  },
+  "presetSteps": {
+    "title": "Steps",
+    "addStep": "Add Step",
+    "type": "Type",
+    "label": "Label",
+    "duration": "Duration (minutes)",
+    "step": "Step"
+  },
+  "timerTypes": {
+    "timer": "Timer",
+    "break": "Break",
+    "video": "Video"
+  }
 }

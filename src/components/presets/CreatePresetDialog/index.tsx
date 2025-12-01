@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { Formik, Form } from "formik";
+import { useTranslation } from "react-i18next";
 import { PresetBasicInfo } from "../PresetBasicInfo";
 import { PresetStepsList } from "../PresetStepsList";
 import {
@@ -26,6 +27,7 @@ interface CreatePresetDialogProps {
 }
 
 export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
+  const { t } = useTranslation();
   const mutation = useCreatePreset();
 
   const initialValues: PresetFormValues = {
@@ -65,7 +67,7 @@ export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Typography variant="h6">Create New Preset</Typography>
+                <Typography variant="h6">{t("createPreset.title")}</Typography>
                 <IconButton onClick={onClose} size="small">
                   <CloseIcon />
                 </IconButton>
@@ -122,10 +124,12 @@ export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
 
             <DialogActions>
               <Button onClick={onClose} disabled={isSubmitting}>
-                Cancel
+                {t("createPreset.cancel")}
               </Button>
               <Button type="submit" variant="contained" disabled={isSubmitting}>
-                {isSubmitting ? "Creating..." : "Create Preset"}
+                {isSubmitting
+                  ? t("createPreset.creating")
+                  : t("createPreset.create")}
               </Button>
             </DialogActions>
           </Form>

@@ -1,5 +1,6 @@
 import { Box, Typography, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { PresetStepItem } from "../PresetStepItem";
 import type { TimerStep } from "../../../types/timer";
 
@@ -16,6 +17,8 @@ export function PresetStepsList({
   onRemoveStep,
   onStepChange,
 }: PresetStepsListProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Box
@@ -27,7 +30,7 @@ export function PresetStepsList({
         }}
       >
         <Typography variant="subtitle1" fontWeight={600}>
-          Steps
+          {t("presetSteps.title")}
         </Typography>
         <Button
           size="small"
@@ -35,7 +38,7 @@ export function PresetStepsList({
           onClick={onAddStep}
           sx={{ textTransform: "none" }}
         >
-          Add Step
+          {t("presetSteps.addStep")}
         </Button>
       </Box>
 

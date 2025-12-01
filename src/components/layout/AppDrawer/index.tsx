@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Drawer, IconButton, Box, Tabs, Tab, Typography } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { HistoryList } from "../../history/HistoryList";
 import { PresetsList } from "../../presets/PresetsList";
 
@@ -24,6 +25,7 @@ function TabPanel({ children, value, index }: TabPanelProps) {
 }
 
 export function AppDrawer() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
@@ -65,7 +67,7 @@ export function AppDrawer() {
               borderColor: "divider",
             }}
           >
-            <Typography variant="h6">Menu</Typography>
+            <Typography variant="h6">{t("menu.title")}</Typography>
             <IconButton onClick={toggleDrawer}>
               <CloseIcon />
             </IconButton>
@@ -74,8 +76,8 @@ export function AppDrawer() {
           {/* Tabs */}
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs value={tabValue} onChange={handleTabChange} centered>
-              <Tab label="Presets" />
-              <Tab label="History" />
+              <Tab label={t("menu.presets")} />
+              <Tab label={t("menu.history")} />
             </Tabs>
           </Box>
 

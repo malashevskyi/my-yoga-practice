@@ -1,4 +1,5 @@
 import type { TimerStep } from "../../../types/timer";
+import i18n from "../../../i18n";
 
 export interface PresetFormValues {
   name: string;
@@ -23,14 +24,14 @@ export function validatePresetForm(values: PresetFormValues) {
   const errors: { name?: string; steps?: string } = {};
 
   if (!values.name.trim()) {
-    errors.name = "Preset name is required";
+    errors.name = i18n.t("createPreset.nameRequired");
   }
 
   const invalidStep = values.steps.find(
     (s) => !s.label.trim() || s.duration <= 0,
   );
   if (invalidStep) {
-    errors.steps = "All steps must have a label and duration > 0";
+    errors.steps = i18n.t("createPreset.stepsInvalid");
   }
 
   return errors;

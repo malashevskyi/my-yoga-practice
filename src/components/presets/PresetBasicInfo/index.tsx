@@ -1,14 +1,16 @@
 import { TextField } from "@mui/material";
 import { useField } from "formik";
+import { useTranslation } from "react-i18next";
 
 export function PresetBasicInfo() {
+  const { t } = useTranslation();
   const [nameField] = useField("name");
   const [descriptionField] = useField("description");
 
   return (
     <>
       <TextField
-        label="Preset Name"
+        label={t("createPreset.name")}
         fullWidth
         {...nameField}
         sx={{ mb: 2 }}
@@ -16,7 +18,7 @@ export function PresetBasicInfo() {
       />
 
       <TextField
-        label="Description (optional)"
+        label={t("createPreset.description")}
         fullWidth
         multiline
         rows={2}

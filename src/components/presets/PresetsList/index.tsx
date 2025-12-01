@@ -11,6 +11,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { usePresets } from "../../../hooks/usePresets";
 import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/time";
@@ -21,6 +22,7 @@ import { CreatePresetDialog } from "../CreatePresetDialog";
 import { useDeletePreset } from "../../../hooks/useDeletePreset";
 
 export function PresetsList() {
+  const { t } = useTranslation();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const setQueue = useTimerStore((state) => state.setQueue);
 
@@ -33,7 +35,7 @@ export function PresetsList() {
 
   const handleDeletePreset = (e: React.MouseEvent, presetId: string) => {
     e.stopPropagation();
-    if (confirm("Are you sure you want to delete this preset?")) {
+    if (confirm(t("presets.deleteConfirm"))) {
       deleteMutation.mutate(presetId);
     }
   };
@@ -49,7 +51,7 @@ export function PresetsList() {
   if (error) {
     return (
       <Alert severity="error" sx={{ m: 2 }}>
-        Failed to load presets: {error.message}
+        {t("presets.loadingError")}: {error.message}
       </Alert>
     );
   }
@@ -65,7 +67,7 @@ export function PresetsList() {
         }}
       >
         <Typography variant="subtitle1" fontWeight={600}>
-          Available Presets
+          {t("presets.title")}
         </Typography>
         {isDevMode && (
           <Button
@@ -75,14 +77,14 @@ export function PresetsList() {
             onClick={() => setCreateDialogOpen(true)}
             sx={{ textTransform: "none" }}
           >
-            Create
+            {t("presets.create")}
           </Button>
         )}
       </Box>
 
       {!presets || presets.length === 0 ? (
         <Typography variant="body2" color="text.secondary" align="center">
-          No presets available yet.
+          {t("presets.noPresets")}
         </Typography>
       ) : (
         <List>
@@ -123,7 +125,8 @@ export function PresetsList() {
                         variant="caption"
                         color="text.secondary"
                       >
-                        {preset.steps.length} steps • Total:{" "}
+                        {preset.steps.length} {t("presets.steps")} •{" "}
+                        {t("presets.total")}:{" "}
                         {formatTime(preset.duration_total)}
                       </Typography>
                     </>

@@ -9,6 +9,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import type { TimerStep, TimerType } from "../../../types/timer";
 
 interface PresetStepItemProps {
@@ -26,6 +27,7 @@ export function PresetStepItem({
   onRemove,
   onChange,
 }: PresetStepItemProps) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -47,20 +49,20 @@ export function PresetStepItem({
       </Typography>
 
       <FormControl sx={{ minWidth: 120 }}>
-        <InputLabel>Type</InputLabel>
+        <InputLabel>{t("presetSteps.type")}</InputLabel>
         <Select
           value={step.type}
-          label="Type"
+          label={t("presetSteps.type")}
           onChange={(e) => onChange(index, "type", e.target.value as TimerType)}
         >
-          <MenuItem value="timer">Timer</MenuItem>
-          <MenuItem value="break">Break</MenuItem>
-          <MenuItem value="video">Video</MenuItem>
+          <MenuItem value="timer">{t("timerTypes.timer")}</MenuItem>
+          <MenuItem value="break">{t("timerTypes.break")}</MenuItem>
+          <MenuItem value="video">{t("timerTypes.video")}</MenuItem>
         </Select>
       </FormControl>
 
       <TextField
-        label="Label"
+        label={t("presetSteps.label")}
         fullWidth
         value={step.label}
         onChange={(e) => onChange(index, "label", e.target.value)}
@@ -68,7 +70,7 @@ export function PresetStepItem({
       />
 
       <TextField
-        label="Duration (min)"
+        label={t("presetSteps.duration")}
         type="number"
         sx={{ width: 140 }}
         defaultValue={Math.round(step.duration / 60)}
