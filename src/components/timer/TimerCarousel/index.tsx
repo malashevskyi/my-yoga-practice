@@ -2,6 +2,9 @@ import { Box, Typography } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/time";
+import { VerticalScrollWrapper } from "../../shared/VerticalScrollWrapper";
+
+const ACTIVE_TIMER_HEIGHT_VH = 30;
 
 export function TimerCarousel() {
   const queue = useTimerStore((state) => state.queue);
@@ -27,17 +30,10 @@ export function TimerCarousel() {
   }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        flexGrow: 1,
-        overflow: "hidden",
-        position: "relative",
-        py: 4,
-      }}
+    <VerticalScrollWrapper
+      activeIndex={activeTimerIndex}
+      totalItems={queue.length}
+      itemSpacingVh={ACTIVE_TIMER_HEIGHT_VH}
     >
       <AnimatePresence mode="popLayout">
         {queue.map((step, index) => {
@@ -48,7 +44,7 @@ export function TimerCarousel() {
           if (isPast) return null;
 
           // Calculate vertical offset with tighter spacing (in vh units)
-          const offset = (index - activeTimerIndex) * 30; // 30vh spacing (tighter)
+          const offset = (index - activeTimerIndex) * ACTIVE_TIMER_HEIGHT_VH;
 
           return (
             <motion.div
@@ -98,7 +94,6 @@ export function TimerCarousel() {
                     fontVariantNumeric: "tabular-nums",
                     letterSpacing: isActive ? "-0.02em" : "normal",
                     transition: "all 0.3s ease",
-                    // Active: 33vh, Inactive: 25vh (slightly smaller)
                     fontSize: isActive ? "33vh" : "25vh",
                     lineHeight: 1,
                     color: isActive ? "text.primary" : "text.disabled",
@@ -111,6 +106,6 @@ export function TimerCarousel() {
           );
         })}
       </AnimatePresence>
-    </Box>
+    </VerticalScrollWrapper>
   );
 }
