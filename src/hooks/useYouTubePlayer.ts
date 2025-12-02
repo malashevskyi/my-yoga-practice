@@ -159,6 +159,18 @@ export function useYouTubePlayer({
     playerRef.current?.playVideo();
   };
 
+  const togglePlayPause = () => {
+    if (playerRef.current) {
+      const state = playerRef.current.getPlayerState();
+      // 1 = PLAYING, 2 = PAUSED
+      if (state === 1) {
+        playerRef.current.pauseVideo();
+      } else {
+        playerRef.current.playVideo();
+      }
+    }
+  };
+
   return {
     containerId,
     isReady,
@@ -166,5 +178,6 @@ export function useYouTubePlayer({
     pause,
     stop,
     restart,
+    togglePlayPause,
   };
 }

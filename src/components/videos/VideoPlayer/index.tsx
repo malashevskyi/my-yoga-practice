@@ -1,23 +1,37 @@
 import { Box } from "@mui/material";
-import { useEffect } from "react";
+import { useImperativeHandle } from "react";
 import { useYouTubePlayer } from "../../../hooks/useYouTubePlayer";
 
 interface VideoPlayerProps {
   videoId: string;
+  ref?: React.Ref<VideoPlayerRef>;
 }
 
-export function VideoPlayer({ videoId }: VideoPlayerProps) {
-  const { containerId, stop } = useYouTubePlayer({
-    videoId,
-    autoplay: true,
-  });
+export interface VideoPlayerRef {
+  play: () => void;
+  pause: () => void;
+  stop: () => void;
+  restart: () => void;
+  togglePlayPause: () => void;
+}
 
-  useEffect(() => {
-    return () => {
-      // Stop video when component unmounts
-      stop();
-    };
-  }, [stop]);
+export function VideoPlayer({ videoId, ref }: VideoPlayerProps) {
+  const { containerId, stop, play, pause, restart, togglePlayPause } =
+    useYouTubePlayer({
+      videoId,
+      autoplay: true,
+    });
+
+  useImperativeHandle(ref, () => ({
+    play,
+    pause,
+    stop,
+    restart,
+    togglePlayPause,
+  }));
+
+  // Don't unmount player - keep it alive for reuse
+  // Just pause when dialog closes (handled by parent)
 
   return (
     <Box

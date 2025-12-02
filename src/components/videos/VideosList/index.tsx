@@ -17,7 +17,8 @@ import type { Video } from "../../../types/video";
 
 export function VideosList() {
   const { t } = useTranslation();
-  const [selectedVideo, setSelectedVideo] = useState<Video | null>(null);
+  const [activeVideo, setActiveVideo] = useState<Video | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const {
     data: videos = [],
@@ -29,11 +30,12 @@ export function VideosList() {
   });
 
   const handleVideoClick = (video: Video) => {
-    setSelectedVideo(video);
+    setActiveVideo(video);
+    setIsDialogOpen(true);
   };
 
   const handleCloseDialog = () => {
-    setSelectedVideo(null);
+    setIsDialogOpen(false);
   };
 
   if (isLoading) {
@@ -95,8 +97,8 @@ export function VideosList() {
       )}
 
       <VideoDialog
-        video={selectedVideo}
-        open={!!selectedVideo}
+        video={activeVideo}
+        open={isDialogOpen}
         onClose={handleCloseDialog}
       />
     </>
