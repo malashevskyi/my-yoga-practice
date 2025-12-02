@@ -25,6 +25,11 @@ export const useBrightnessStore = create<BrightnessStore>()(
           userBrightness: value, // Remember user's choice
           isAutoDimmed: false, // User manually changed it
         });
+
+        // If brightness is 100% (default), remove from localStorage to save space
+        if (value === 100) {
+          localStorage.removeItem("yoga-timer-brightness");
+        }
       },
 
       setAutoDim: (dimmed) => {
@@ -45,6 +50,10 @@ export const useBrightnessStore = create<BrightnessStore>()(
     }),
     {
       name: "yoga-timer-brightness",
+      // Only persist userBrightness (saves storage space, brightness and isAutoDimmed are runtime)
+      partialize: (state) => ({
+        userBrightness: state.userBrightness,
+      }),
     },
   ),
 );

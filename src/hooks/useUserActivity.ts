@@ -17,10 +17,11 @@ export function useUserActivity() {
   const isDrawerOpen = useDrawerStore((state) => state.isOpen);
   const autoDimEnabled = useSettingsStore((state) => state.autoDimEnabled);
 
-  // On mount, always set brightness to 100%
+  // On mount, restore saved brightness (don't override with 100%)
   useEffect(() => {
     const brightnessStore = useBrightnessStore.getState();
-    brightnessStore.setBrightness(100);
+    // Restore to saved userBrightness (which will be loaded from localStorage if exists)
+    brightnessStore.restoreBrightness();
   }, []);
 
   useEffect(() => {
