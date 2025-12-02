@@ -1,12 +1,13 @@
 {
   "name": "yoga-timer",
+  "author": "Vitalii Malashevskyi",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "dev:doppler": "doppler run -- vite",
-    "build": "tsc -b && vite build",
+    "build": "doppler run -- tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
