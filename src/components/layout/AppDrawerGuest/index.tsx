@@ -7,22 +7,15 @@ import {
   ListItem,
   ListItemButton,
   ListItemText,
-  Button,
 } from "@mui/material";
-import {
-  Menu as MenuIcon,
-  Close as CloseIcon,
-  Login as LoginIcon,
-} from "@mui/icons-material";
+import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { signInWithPopup } from "firebase/auth";
-import { toast } from "sonner";
-import { auth, googleProvider } from "../../../lib/firebase";
 import { useDrawerStore } from "../../../store/drawerStore";
 import { useTimerStore } from "../../../store/timerStore";
 import { DEFAULT_PRESETS } from "../../../data/defaultPresets";
 import { formatTime } from "../../../utils/formatTime";
+import { LoginButton } from "../../core/LoginButton";
 
 export function AppDrawerGuest() {
   const { t } = useTranslation();
@@ -47,16 +40,6 @@ export function AppDrawerGuest() {
     presetSteps: (typeof DEFAULT_PRESETS)[0]["steps"],
   ) => {
     setQueue(presetSteps);
-  };
-
-  const handleLogin = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-      // Drawer will automatically switch to authenticated version via AppDrawerWrapper
-    } catch (error) {
-      console.error("❌ Login error:", error);
-      toast.error("Failed to login");
-    }
   };
 
   // Check if current queue matches a preset
@@ -167,12 +150,9 @@ export function AppDrawerGuest() {
               bgcolor: "background.paper",
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <LoginIcon sx={{ mr: 1, color: "primary.main" }} />
-              <Typography variant="subtitle1" fontWeight={600}>
-                {t("guest.loginPromptTitle")}
-              </Typography>
-            </Box>
+            <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1 }}>
+              {t("guest.loginPromptTitle")}
+            </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
               {t("guest.loginPromptFeatures")}:
             </Typography>
@@ -187,14 +167,7 @@ export function AppDrawerGuest() {
                 {t("guest.featureHistory")}
               </Typography>
             </Box>
-            <Button
-              variant="contained"
-              fullWidth
-              startIcon={<LoginIcon />}
-              onClick={handleLogin}
-            >
-              {t("guest.signInButton")}
-            </Button>
+            <LoginButton variant="contained" fullWidth />
           </Box>
         </Box>
       </Drawer>

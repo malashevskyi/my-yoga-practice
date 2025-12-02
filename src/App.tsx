@@ -1,7 +1,7 @@
 import { Box, GlobalStyles } from "@mui/material";
-import { ThemeSwitcher } from "./components/core/ThemeSwitcher";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
-import { AuthButton } from "./components/core/AuthButton";
+import { LoginButton } from "./components/core/LoginButton";
+import { LogoutButton } from "./components/core/LogoutButton";
 import { ErrorBoundary } from "./components/core/ErrorBoundary";
 import { AppDrawerWrapper } from "./components/layout/AppDrawerWrapper";
 import { GlobalProgress } from "./components/timer/GlobalProgress";
@@ -15,8 +15,9 @@ import { useUserActivity } from "./hooks/useUserActivity";
 import { useAuthInit } from "./hooks/useAuthInit";
 import { useTimerStore } from "./store/timerStore";
 import { useBrightnessStore } from "./store/brightnessStore";
-import { useThemeStore } from "./store/themeStore";
+import { useAuthStore } from "./store/authStore";
 import { useMuiGhostFix } from "./hooks/useMuiGhostFix";
+import { Toaster } from "sonner";
 
 function App() {
   // Initialize authentication state
@@ -35,9 +36,9 @@ function App() {
 
   const gongToPlay = useTimerStore((state) => state.gongToPlay);
   const brightness = useBrightnessStore((state) => state.brightness);
-  const themeMode = useThemeStore((state) => state.mode);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  // Calculate opacity for both themes (brightness affects text visibility)
+  // Calculate opacity for dark theme (brightness affects text visibility)
   // brightness: 20 -> opacity: 0.5, brightness: 100 -> opacity: 1
   const textOpacity = 0.5 + (brightness / 100) * 0.5;
 
@@ -45,28 +46,18 @@ function App() {
     <ErrorBoundary>
       <GlobalStyles
         styles={{
-          body:
-            themeMode === "dark"
-              ? {
-                  // Dark theme: reduce opacity of all text and elements
-                  // BUT keep brightness slider fully visible
-                  "& *:not(img):not(svg):not(path):not(.MuiSlider-root):not(.MuiSlider-root *)":
-                    {
-                      opacity: textOpacity,
-                      transition: "opacity 0.4s ease-in-out",
-                    },
-                }
-              : {
-                  // Light theme: reduce opacity of all text and elements (makes them grayer)
-                  // BUT keep brightness slider fully visible
-                  "& *:not(img):not(svg):not(path):not(.MuiSlider-root):not(.MuiSlider-root *)":
-                    {
-                      opacity: textOpacity,
-                      transition: "opacity 0.4s ease-in-out",
-                    },
-                },
+          body: {
+            // Dark theme: reduce opacity of all text and elements
+            // BUT keep brightness slider fully visible
+            "& *:not(img):not(svg):not(path):not(.MuiSlider-root):not(.MuiSlider-root *)":
+              {
+                opacity: textOpacity,
+                transition: "opacity 0.4s ease-in-out",
+              },
+          },
         }}
       />
+      <Toaster />
       <Box
         sx={{
           display: "flex",
@@ -78,7 +69,7 @@ function App() {
         {/* Global Progress Bar */}
         <GlobalProgress />
 
-        {/* Theme & Language Controls (Top Right) */}
+        {/* Language & Auth Controls (Top Right) */}
         <Box
           sx={{
             position: "fixed",
@@ -90,9 +81,8 @@ function App() {
           }}
         >
           <AppDrawerWrapper />
-          <ThemeSwitcher />
           <LanguageSwitcher />
-          <AuthButton />
+          {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </Box>
 
         {/* Current Time with Yoga Period Indicator */}

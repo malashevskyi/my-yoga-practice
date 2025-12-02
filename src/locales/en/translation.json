@@ -2,8 +2,6 @@
   "title": "Yoga Timer",
   "settings": "Settings",
   "language": "Language",
-  "toggleTheme": "Toggle Theme",
-  "currentTheme": "Current theme",
   "menu": {
     "title": "Menu",
     "presets": "Presets",
@@ -55,6 +53,10 @@
     "featureAddVideos": "Add yoga videos",
     "featureHistory": "Timer history & Clockify sync",
     "signInButton": "Sign In"
+  },
+  "auth": {
+    "login": "Sign In",
+    "logout": "Sign Out"
   },
   "defaultPresets": {
     "preset1Name": "10 minutes kirtan & 20 minutes meditation",

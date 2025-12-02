@@ -2,8 +2,6 @@
   "title": "Yoga Timer",
   "settings": "Налаштування",
   "language": "Мова",
-  "toggleTheme": "Змінити тему",
-  "currentTheme": "Поточна тема",
   "menu": {
     "title": "Меню",
     "presets": "Пресети",
@@ -55,6 +53,10 @@
     "featureAddVideos": "Додавання відео для йоги",
     "featureHistory": "Історія таймера і синхронізація з Clockify",
     "signInButton": "Увійти"
+  },
+  "auth": {
+    "login": "Увійти",
+    "logout": "Вийти"
   },
   "defaultPresets": {
     "preset1Name": "10 хвилин кіртан і 20 хвилин медитація",
