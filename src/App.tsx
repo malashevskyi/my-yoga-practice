@@ -78,6 +78,10 @@ function App() {
             right: 16,
             zIndex: 1000,
             display: "flex",
+            flexDirection: {
+              xs: "column-reverse",
+              md: "row",
+            },
             gap: 1,
           }}
         >

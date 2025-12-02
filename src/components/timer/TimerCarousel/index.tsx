@@ -1,12 +1,11 @@
+import { useWindowSize } from "react-use";
 import { Box, Typography, ButtonBase } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/formatTime";
 import { VerticalScrollWrapper } from "../../shared/VerticalScrollWrapper";
-import { getFontSize } from "./utils/getForntSize";
-
-const ACTIVE_TIMER_HEIGHT_VH = 30;
+import { getFontSize, getTimerSpacing } from "./utils/getForntSize";
 
 export function TimerCarousel() {
   const queue = useTimerStore((state) => state.queue);
@@ -15,6 +14,10 @@ export function TimerCarousel() {
   const adjustTimerDuration = useTimerStore(
     (state) => state.adjustTimerDuration,
   );
+  const { height, width } = useWindowSize();
+
+  // Calculate adaptive spacing based on font size
+  const itemSpacingVh = getTimerSpacing(width, height);
 
   // Track flash animation state for each timer
   const [flashingTimer, setFlashingTimer] = useState<{
@@ -60,7 +63,7 @@ export function TimerCarousel() {
     <VerticalScrollWrapper
       activeIndex={activeTimerIndex}
       totalItems={queue.length}
-      itemSpacingVh={ACTIVE_TIMER_HEIGHT_VH}
+      itemSpacingVh={itemSpacingVh}
     >
       <AnimatePresence mode="popLayout">
         {queue.map((step, index) => {
@@ -70,8 +73,8 @@ export function TimerCarousel() {
           // Don't render past timers - they're in history now
           if (isPast) return null;
 
-          // Calculate vertical offset with tighter spacing (in vh units)
-          const offset = (index - activeTimerIndex) * ACTIVE_TIMER_HEIGHT_VH;
+          // Calculate vertical offset with adaptive spacing (in vh units)
+          const offset = (index - activeTimerIndex) * itemSpacingVh;
 
           const timeString = isActive
             ? formatTime(timeLeft)
@@ -102,6 +105,7 @@ export function TimerCarousel() {
               }}
             >
               <Box
+                pt={height > 400 ? 10 : 15}
                 sx={{
                   textAlign: "center",
                   userSelect: "none",
@@ -109,26 +113,28 @@ export function TimerCarousel() {
                 }}
               >
                 {/* Timer Type Label */}
-                <Typography
-                  variant={isActive ? "h6" : "body2"}
-                  sx={{
-                    textTransform: "capitalize",
-                    fontWeight: isActive ? 600 : 400,
-                    fontSize: isActive ? "min(6vw, 4vh)" : "2vh",
-                    transition: "all 0.3s ease, color 0.3s ease",
-                    color: isFlashing
-                      ? `${flashColor}.main`
-                      : isActive
-                      ? "text.primary"
-                      : "text.disabled",
-                    mb: {
-                      xs: 0,
-                      md: -3,
-                    },
-                  }}
-                >
-                  {step.label}
-                </Typography>
+                {height > 550 && (
+                  <Typography
+                    variant={isActive ? "h6" : "body2"}
+                    sx={{
+                      textTransform: "capitalize",
+                      fontWeight: isActive ? 600 : 400,
+                      fontSize: isActive ? "min(6vw, 4vh)" : "2vh",
+                      transition: "all 0.3s ease, color 0.3s ease",
+                      color: isFlashing
+                        ? `${flashColor}.main`
+                        : isActive
+                        ? "text.primary"
+                        : "text.disabled",
+                      mb: {
+                        xs: 0,
+                        md: -3,
+                      },
+                    }}
+                  >
+                    {step.label}
+                  </Typography>
+                )}
 
                 {/* Time Display */}
                 <Box sx={{ position: "relative" }}>

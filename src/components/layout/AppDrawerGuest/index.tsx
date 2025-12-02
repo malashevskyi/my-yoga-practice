@@ -70,7 +70,8 @@ export function AppDrawerGuest() {
       <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>
         <Box
           sx={{
-            width: 400,
+            maxWidth: 400,
+            width: "100vw",
             height: "100%",
             display: "flex",
             flexDirection: "column",

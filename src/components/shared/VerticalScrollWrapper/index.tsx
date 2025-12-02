@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import { type ReactNode } from "react";
 import { useVerticalScroll } from "../../../hooks/useVerticalScroll";
+import useWindowSize from "react-use/lib/useWindowSize";
 
 interface VerticalScrollWrapperProps {
   children: ReactNode;
@@ -16,6 +17,7 @@ export function VerticalScrollWrapper({
   totalItems,
   itemSpacingVh,
 }: VerticalScrollWrapperProps) {
+  const { height } = useWindowSize();
   const { containerRef, y, dragConstraints } = useVerticalScroll({
     activeIndex,
     totalItems,
@@ -34,10 +36,14 @@ export function VerticalScrollWrapper({
         overflow: "hidden",
         position: "relative",
         // Fade mask for top/bottom edges
-        maskImage:
-          "linear-gradient(to bottom, transparent 0%, black 1%, black 75%, transparent 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to bottom, transparent 0%, black 1%, black 75%, transparent 100%)",
+        ...(height > 500
+          ? {
+              maskImage:
+                "linear-gradient(to bottom, transparent 0%, black 1%, black 75%, transparent 100%)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent 0%, black 1%, black 75%, transparent 100%)",
+            }
+          : {}),
       }}
     >
       <motion.div
@@ -74,7 +80,7 @@ export function VerticalScrollWrapper({
             "&::before": {
               content: '""',
               position: "absolute",
-              top: "-20vh",
+              top: height > 600 ? "-20vh" : "-10vh",
               left: 0,
               right: 0,
               height: "400vh",

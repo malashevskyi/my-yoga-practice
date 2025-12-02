@@ -59,7 +59,7 @@ export function AppDrawer() {
 
       {/* Drawer */}
       <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>
-        <Box sx={{ width: 400, height: "100%" }}>
+        <Box sx={{ maxWidth: 400, width: "100vw", height: "100%" }}>
           {/* Header */}
           <Box
             sx={{

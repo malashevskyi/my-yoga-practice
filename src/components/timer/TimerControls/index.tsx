@@ -1,4 +1,5 @@
 import { Box, IconButton, Slider, Typography } from "@mui/material";
+import useWindowSize from "react-use/lib/useWindowSize";
 import {
   PlayArrow,
   Pause,
@@ -21,6 +22,7 @@ export function TimerControls() {
   const resetCurrent = useTimerStore((state) => state.resetCurrent);
   const clearAll = useTimerStore((state) => state.clearAll);
   const skipNext = useTimerStore((state) => state.skipNext);
+  const { height } = useWindowSize();
 
   const brightness = useBrightnessStore((state) => state.brightness);
   const setBrightness = useBrightnessStore((state) => state.setBrightness);
@@ -149,37 +151,39 @@ export function TimerControls() {
       </Box>
 
       {/* Brightness Slider */}
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: 400,
-          px: 3,
-          display: "flex",
-          alignItems: "center",
-          gap: 2,
-        }}
-      >
-        <Brightness6 sx={{ fontSize: 24, opacity: 1 }} />
-        <Slider
-          value={brightness}
-          onChange={handleBrightnessChange}
-          min={MIN_BRIGHTNESS}
-          max={MAX_BRIGHTNESS}
-          step={1}
-          valueLabelDisplay="auto"
-          valueLabelFormat={(value) => `${value}%`}
+      {height > 550 && (
+        <Box
           sx={{
-            flex: 1,
-            "& .MuiSlider-thumb": {
-              width: 20,
-              height: 20,
-            },
+            width: "100%",
+            maxWidth: 400,
+            px: 3,
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
           }}
-        />
-        <Typography sx={{ minWidth: 45, textAlign: "right", opacity: 1 }}>
-          {brightness}%
-        </Typography>
-      </Box>
+        >
+          <Brightness6 sx={{ fontSize: 24, opacity: 1 }} />
+          <Slider
+            value={brightness}
+            onChange={handleBrightnessChange}
+            min={MIN_BRIGHTNESS}
+            max={MAX_BRIGHTNESS}
+            step={1}
+            valueLabelDisplay="auto"
+            valueLabelFormat={(value) => `${value}%`}
+            sx={{
+              flex: 1,
+              "& .MuiSlider-thumb": {
+                width: 20,
+                height: 20,
+              },
+            }}
+          />
+          <Typography sx={{ minWidth: 45, textAlign: "right", opacity: 1 }}>
+            {brightness}%
+          </Typography>
+        </Box>
+      )}
     </Box>
   );
 }
