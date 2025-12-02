@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useId } from "react";
+import { toast } from "sonner";
 
 interface UseYouTubePlayerOptions {
   videoId: string;
@@ -121,6 +122,7 @@ export function useYouTubePlayer({
           playerRef.current.stopVideo();
         } catch (error) {
           console.error("Error stopping video:", error);
+          toast.error("Error stopping YouTube video.");
         }
       }
 
@@ -132,6 +134,7 @@ export function useYouTubePlayer({
           playerRef.current.destroy();
         } catch (error) {
           console.error("Error destroying player:", error);
+          toast.error("Error destroying YouTube player.");
         }
       }
 

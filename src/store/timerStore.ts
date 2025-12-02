@@ -177,12 +177,6 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
         ? "/gongs/two-gongs.mp3"
         : "/gongs/one-gong.mp3";
 
-      console.log(
-        `🔔 Timer ${activeTimerIndex + 1} complete! Playing ${
-          hasMoreSteps ? "TWO" : "ONE"
-        } gong(s)!`,
-      );
-
       // Add completed timer to history
       useHistoryStore.getState().addCompletedTimer(currentStep);
 
@@ -220,8 +214,6 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
         // End of queue
         if (isLooping && queue.length > 0) {
           // Loop back to start after 3 second pause
-          console.log("🔁 Looping back to start");
-
           setTimeout(() => {
             const currentState = get();
             if (
@@ -241,7 +233,6 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
           }, 3000);
         } else {
           // Complete - keep gong playing, don't clear it
-          console.log("✅ Timer completed!");
           set({
             status: "completed",
             totalProgress: 100,

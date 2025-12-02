@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { toast } from "sonner";
 import AudioPlayer from "react-h5-audio-player";
 import "react-h5-audio-player/lib/styles.css";
 
@@ -33,6 +34,7 @@ export function GongPlayer({
         audioElement.load(); // Reload new source (this resets currentTime)
         audioElement.play().catch((error: Error) => {
           console.error("Failed to play gong:", error);
+          toast.error("Failed to play gong sound.");
         });
       }
     }
