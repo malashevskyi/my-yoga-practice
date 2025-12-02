@@ -24,6 +24,7 @@ interface TimerStore {
   updateTime: () => void; // Renamed from tick - updates based on real time
   setIsLooping: (value: boolean) => void;
   clearGong: () => void;
+  adjustTimerDuration: (index: number, minutes: number) => void; // Add or subtract minutes from a timer
 }
 
 export const useTimerStore = create<TimerStore>((set, get) => ({
@@ -251,6 +252,42 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
 
   clearGong: () => {
     set({ gongToPlay: null });
+  },
+
+  adjustTimerDuration: (index, minutes) => {
+    const { queue, activeTimerIndex, timeLeft, status } = get();
+    if (index < 0 || index >= queue.length) return;
+
+    const updatedQueue = [...queue];
+    const step = updatedQueue[index];
+    const newDuration = Math.max(60, step.duration + minutes * 60); // Minimum 1 minute (60 seconds)
+
+    updatedQueue[index] = {
+      ...step,
+      duration: newDuration,
+    };
+
+    // If adjusting the active timer, also update timeLeft
+    if (index === activeTimerIndex) {
+      // If timer is not started yet (idle), update timeLeft to match new duration
+      if (status === "idle" || status === "paused") {
+        set({
+          queue: updatedQueue,
+          timeLeft: newDuration,
+        });
+      } else if (status === "running") {
+        // If running, adjust timeLeft proportionally to preserve progress
+        const elapsedSeconds = step.duration - timeLeft;
+        set({
+          queue: updatedQueue,
+          timeLeft: Math.max(0, newDuration - elapsedSeconds),
+        });
+      } else {
+        set({ queue: updatedQueue });
+      }
+    } else {
+      set({ queue: updatedQueue });
+    }
   },
 
   clearAll: () => {
