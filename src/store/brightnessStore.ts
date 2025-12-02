@@ -1,0 +1,50 @@
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+
+const MIN_BRIGHTNESS = 40;
+
+interface BrightnessStore {
+  brightness: number; // 40-100
+  userBrightness: number; // User's preferred brightness when slider is used
+  isAutoDimmed: boolean; // Whether brightness is currently auto-dimmed
+  setBrightness: (value: number) => void;
+  setAutoDim: (dimmed: boolean) => void;
+  restoreBrightness: () => void;
+}
+
+export const useBrightnessStore = create<BrightnessStore>()(
+  persist(
+    (set, get) => ({
+      brightness: 100, // Current brightness
+      userBrightness: 100, // User's preferred brightness
+      isAutoDimmed: false,
+
+      setBrightness: (value) => {
+        set({
+          brightness: value,
+          userBrightness: value, // Remember user's choice
+          isAutoDimmed: false, // User manually changed it
+        });
+      },
+
+      setAutoDim: (dimmed) => {
+        if (dimmed) {
+          // Auto-dim to minimum (40)
+          set({ brightness: MIN_BRIGHTNESS, isAutoDimmed: true });
+        } else {
+          // Restore to user's preferred brightness
+          const { userBrightness } = get();
+          set({ brightness: userBrightness, isAutoDimmed: false });
+        }
+      },
+
+      restoreBrightness: () => {
+        const { userBrightness } = get();
+        set({ brightness: userBrightness, isAutoDimmed: false });
+      },
+    }),
+    {
+      name: "yoga-timer-brightness",
+    },
+  ),
+);

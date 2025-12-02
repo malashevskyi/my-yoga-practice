@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { HistoryList } from "../../history/HistoryList";
 import { PresetsList } from "../../presets/PresetsList";
 import { VideosList } from "../../videos/VideosList";
+import { useDrawerStore } from "../../../store/drawerStore";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -27,11 +28,13 @@ function TabPanel({ children, value, index }: TabPanelProps) {
 
 export function AppDrawer() {
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
   const [tabValue, setTabValue] = useState(0);
 
+  const isOpen = useDrawerStore((state) => state.isOpen);
+  const setIsOpen = useDrawerStore((state) => state.setIsOpen);
+
   const toggleDrawer = () => {
-    setOpen(!open);
+    setIsOpen(!isOpen);
   };
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
@@ -55,7 +58,7 @@ export function AppDrawer() {
       </IconButton>
 
       {/* Drawer */}
-      <Drawer anchor="right" open={open} onClose={toggleDrawer}>
+      <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>
         <Box sx={{ width: 400, height: "100%" }}>
           {/* Header */}
           <Box

@@ -81,12 +81,15 @@ export function TimerCarousel() {
                 <Typography
                   variant={isActive ? "h6" : "body2"}
                   sx={{
-                    mb: 1,
                     textTransform: "capitalize",
                     fontWeight: isActive ? 600 : 400,
-                    fontSize: isActive ? "4vh" : "2vh",
+                    fontSize: isActive ? "min(6vw, 4vh)" : "2vh",
                     transition: "all 0.3s ease",
                     color: isActive ? "text.primary" : "text.disabled",
+                    mb: {
+                      xs: 0,
+                      md: -3,
+                    },
                   }}
                 >
                   {step.label}

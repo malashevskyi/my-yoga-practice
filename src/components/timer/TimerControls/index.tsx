@@ -1,12 +1,17 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Slider, Typography } from "@mui/material";
 import {
   PlayArrow,
   Pause,
   Refresh,
   SkipNext,
   Clear,
+  Brightness6,
 } from "@mui/icons-material";
 import { useTimerStore } from "../../../store/timerStore";
+import { useBrightnessStore } from "../../../store/brightnessStore";
+
+export const MIN_BRIGHTNESS = 40;
+export const MAX_BRIGHTNESS = 100;
 
 export function TimerControls() {
   const status = useTimerStore((state) => state.status);
@@ -17,6 +22,9 @@ export function TimerControls() {
   const clearAll = useTimerStore((state) => state.clearAll);
   const skipNext = useTimerStore((state) => state.skipNext);
 
+  const brightness = useBrightnessStore((state) => state.brightness);
+  const setBrightness = useBrightnessStore((state) => state.setBrightness);
+
   const hasTimers = queue.length > 0;
   const isRunning = status === "running";
   const isCompleted = status === "completed";
@@ -26,102 +34,152 @@ export function TimerControls() {
   // Reset and skip available when has timers
   const canResetSkip = hasTimers;
 
+  const handleBrightnessChange = (
+    _event: Event,
+    newValue: number | number[],
+  ) => {
+    setBrightness(newValue as number);
+  };
+
   return (
     <Box
       sx={{
         display: "flex",
-        justifyContent: "center",
+        flexDirection: "column",
         alignItems: "center",
-        gap: 2,
+        gap: 3,
         pb: 4,
       }}
     >
-      {/* Play/Pause */}
-      <IconButton
-        onClick={isRunning ? pause : start}
-        disabled={!canPlayPause}
-        size="large"
+      {/* Control Buttons */}
+      <Box
         sx={{
-          width: 72,
-          height: 72,
-          bgcolor: "primary.main",
-          color: "primary.contrastText",
-          "&:hover": {
-            bgcolor: "primary.dark",
-          },
-          "&:disabled": {
-            bgcolor: "action.disabledBackground",
-          },
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 2,
         }}
       >
-        {isRunning ? (
-          <Pause sx={{ fontSize: 40 }} />
-        ) : (
-          <PlayArrow sx={{ fontSize: 40 }} />
-        )}
-      </IconButton>
+        {/* Play/Pause */}
+        <IconButton
+          onClick={isRunning ? pause : start}
+          disabled={!canPlayPause}
+          size="large"
+          sx={{
+            width: 72,
+            height: 72,
+            bgcolor: "primary.main",
+            color: "primary.contrastText",
+            "&:hover": {
+              bgcolor: "primary.dark",
+            },
+            "&:disabled": {
+              bgcolor: "action.disabledBackground",
+            },
+          }}
+        >
+          {isRunning ? (
+            <Pause sx={{ fontSize: 40 }} />
+          ) : (
+            <PlayArrow sx={{ fontSize: 40 }} />
+          )}
+        </IconButton>
 
-      {/* Reset */}
-      <IconButton
-        onClick={resetCurrent}
-        disabled={!canResetSkip}
-        size="large"
-        sx={{
-          width: 56,
-          height: 56,
-          bgcolor: "action.hover",
-          "&:hover": {
-            bgcolor: "action.selected",
-          },
-          "&:disabled": {
-            bgcolor: "action.disabledBackground",
-          },
-        }}
-      >
-        <Refresh sx={{ fontSize: 32 }} />
-      </IconButton>
+        {/* Reset */}
+        <IconButton
+          onClick={resetCurrent}
+          disabled={!canResetSkip}
+          size="large"
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: "action.hover",
+            "&:hover": {
+              bgcolor: "action.selected",
+            },
+            "&:disabled": {
+              bgcolor: "action.disabledBackground",
+            },
+          }}
+        >
+          <Refresh sx={{ fontSize: 32 }} />
+        </IconButton>
 
-      {/* Skip */}
-      <IconButton
-        onClick={skipNext}
-        disabled={!canResetSkip}
-        size="large"
-        sx={{
-          width: 56,
-          height: 56,
-          bgcolor: "action.hover",
-          "&:hover": {
-            bgcolor: "action.selected",
-          },
-          "&:disabled": {
-            bgcolor: "action.disabledBackground",
-          },
-        }}
-      >
-        <SkipNext sx={{ fontSize: 32 }} />
-      </IconButton>
+        {/* Skip */}
+        <IconButton
+          onClick={skipNext}
+          disabled={!canResetSkip}
+          size="large"
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: "action.hover",
+            "&:hover": {
+              bgcolor: "action.selected",
+            },
+            "&:disabled": {
+              bgcolor: "action.disabledBackground",
+            },
+          }}
+        >
+          <SkipNext sx={{ fontSize: 32 }} />
+        </IconButton>
 
-      {/* Clear All */}
-      <IconButton
-        onClick={clearAll}
-        disabled={!hasTimers}
-        size="large"
+        {/* Clear All */}
+        <IconButton
+          onClick={clearAll}
+          disabled={!hasTimers}
+          size="large"
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: "action.hover",
+            color: "error.main",
+            "&:hover": {
+              bgcolor: "error.light",
+              color: "error.contrastText",
+            },
+            "&:disabled": {
+              bgcolor: "action.disabledBackground",
+            },
+          }}
+        >
+          <Clear sx={{ fontSize: 32 }} />
+        </IconButton>
+      </Box>
+
+      {/* Brightness Slider */}
+      <Box
         sx={{
-          width: 56,
-          height: 56,
-          bgcolor: "action.hover",
-          color: "error.main",
-          "&:hover": {
-            bgcolor: "error.light",
-            color: "error.contrastText",
-          },
-          "&:disabled": {
-            bgcolor: "action.disabledBackground",
-          },
+          width: "100%",
+          maxWidth: 400,
+          px: 3,
+          display: "flex",
+          alignItems: "center",
+          gap: 2,
         }}
       >
-        <Clear sx={{ fontSize: 32 }} />
-      </IconButton>
+        <Brightness6 sx={{ fontSize: 24, opacity: 1 }} />
+        <Slider
+          value={brightness}
+          onChange={handleBrightnessChange}
+          min={MIN_BRIGHTNESS}
+          max={MAX_BRIGHTNESS}
+          step={1}
+          valueLabelDisplay="auto"
+          valueLabelFormat={(value) => `${value}%`}
+          sx={{
+            flex: 1,
+            "& .MuiSlider-thumb": {
+              width: 20,
+              height: 20,
+            },
+          }}
+        />
+        <Typography sx={{ minWidth: 45, textAlign: "right", opacity: 1 }}>
+          {brightness}%
+        </Typography>
+      </Box>
     </Box>
   );
 }

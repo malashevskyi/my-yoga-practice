@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, GlobalStyles } from "@mui/material";
 import { ThemeSwitcher } from "./components/core/ThemeSwitcher";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
 import { ErrorBoundary } from "./components/core/ErrorBoundary";
@@ -10,7 +10,10 @@ import { TimerControls } from "./components/timer/TimerControls";
 import { GongPlayer } from "./components/audio/GongPlayer";
 import { useTimerEngine } from "./hooks/useTimerEngine";
 import { useFavoritePresetAutoload } from "./hooks/useFavoritePresetAutoload";
+import { useUserActivity } from "./hooks/useUserActivity";
 import { useTimerStore } from "./store/timerStore";
+import { useBrightnessStore } from "./store/brightnessStore";
+import { useThemeStore } from "./store/themeStore";
 
 function App() {
   // Initialize timer engine
@@ -19,10 +22,43 @@ function App() {
   // Auto-load favorite preset on startup
   useFavoritePresetAutoload();
 
+  // Track user activity to restore brightness
+  useUserActivity();
+
   const gongToPlay = useTimerStore((state) => state.gongToPlay);
+  const brightness = useBrightnessStore((state) => state.brightness);
+  const themeMode = useThemeStore((state) => state.mode);
+
+  // Calculate opacity for both themes (brightness affects text visibility)
+  // brightness: 20 -> opacity: 0.5, brightness: 100 -> opacity: 1
+  const textOpacity = 0.5 + (brightness / 100) * 0.5;
 
   return (
     <ErrorBoundary>
+      <GlobalStyles
+        styles={{
+          body:
+            themeMode === "dark"
+              ? {
+                  // Dark theme: reduce opacity of all text and elements
+                  // BUT keep brightness slider fully visible
+                  "& *:not(img):not(svg):not(path):not(.MuiSlider-root):not(.MuiSlider-root *)":
+                    {
+                      opacity: textOpacity,
+                      transition: "opacity 0.4s ease-in-out",
+                    },
+                }
+              : {
+                  // Light theme: reduce opacity of all text and elements (makes them grayer)
+                  // BUT keep brightness slider fully visible
+                  "& *:not(img):not(svg):not(path):not(.MuiSlider-root):not(.MuiSlider-root *)":
+                    {
+                      opacity: textOpacity,
+                      transition: "opacity 0.4s ease-in-out",
+                    },
+                },
+        }}
+      />
       <Box
         sx={{
           display: "flex",
