@@ -9,11 +9,15 @@ import { TimerCarousel } from "./components/timer/TimerCarousel";
 import { TimerControls } from "./components/timer/TimerControls";
 import { GongPlayer } from "./components/audio/GongPlayer";
 import { useTimerEngine } from "./hooks/useTimerEngine";
+import { useFavoritePresetAutoload } from "./hooks/useFavoritePresetAutoload";
 import { useTimerStore } from "./store/timerStore";
 
 function App() {
   // Initialize timer engine
   useTimerEngine();
+
+  // Auto-load favorite preset on startup
+  useFavoritePresetAutoload();
 
   const gongToPlay = useTimerStore((state) => state.gongToPlay);
 

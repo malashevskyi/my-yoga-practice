@@ -10,10 +10,16 @@ import {
   Button,
   IconButton,
 } from "@mui/material";
-import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  Delete as DeleteIcon,
+  Star as StarIcon,
+  StarBorder as StarBorderIcon,
+} from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { usePresets } from "../../../hooks/usePresets";
 import { useTimerStore } from "../../../store/timerStore";
+import { useFavoritePresetStore } from "../../../store/favoritePresetStore";
 import { formatTime } from "../../../utils/formatTime";
 import { isDevMode } from "../../../lib/supabase";
 import { useState } from "react";
@@ -25,6 +31,12 @@ export function PresetsList() {
   const { t } = useTranslation();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const setQueue = useTimerStore((state) => state.setQueue);
+  const favoritePresetId = useFavoritePresetStore(
+    (state) => state.favoritePresetId,
+  );
+  const setFavoritePreset = useFavoritePresetStore(
+    (state) => state.setFavoritePreset,
+  );
 
   const { data: presets, isLoading, error } = usePresets();
   const deleteMutation = useDeletePreset();
@@ -36,7 +48,23 @@ export function PresetsList() {
   const handleDeletePreset = (e: React.MouseEvent, presetId: string) => {
     e.stopPropagation();
     if (confirm(t("presets.deleteConfirm"))) {
+      // If deleting favorite preset, clear it
+      if (presetId === favoritePresetId) {
+        setFavoritePreset(null, null);
+      }
       deleteMutation.mutate(presetId);
+    }
+  };
+
+  const handleToggleFavorite = (e: React.MouseEvent, presetId: string) => {
+    e.stopPropagation();
+    if (favoritePresetId === presetId) {
+      setFavoritePreset(null, null);
+    } else {
+      const preset = presets?.find((p) => p.id === presetId);
+      if (preset) {
+        setFavoritePreset(presetId, preset.steps);
+      }
     }
   };
 
@@ -93,16 +121,32 @@ export function PresetsList() {
               key={preset.id}
               disablePadding
               secondaryAction={
-                isDevMode && (
+                <Box sx={{ display: "flex", gap: 0.5 }}>
                   <IconButton
                     edge="end"
-                    aria-label="delete"
-                    onClick={(e) => handleDeletePreset(e, preset.id)}
-                    disabled={deleteMutation.isPending}
+                    aria-label="favorite"
+                    onClick={(e) => handleToggleFavorite(e, preset.id)}
+                    color={
+                      favoritePresetId === preset.id ? "primary" : "default"
+                    }
                   >
-                    <DeleteIcon />
+                    {favoritePresetId === preset.id ? (
+                      <StarIcon />
+                    ) : (
+                      <StarBorderIcon />
+                    )}
                   </IconButton>
-                )
+                  {isDevMode && (
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={(e) => handleDeletePreset(e, preset.id)}
+                      disabled={deleteMutation.isPending}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
+                </Box>
               }
             >
               <ListItemButton onClick={() => handleSelectPreset(preset.steps)}>
