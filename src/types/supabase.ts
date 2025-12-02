@@ -41,6 +41,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      videos: {
+        Row: {
+          id: string;
+          local_name: string;
+          url: string;
+          title: string;
+        };
+        Insert: {
+          id?: string;
+          local_name: string;
+          url: string;
+          title: string;
+        };
+        Update: {
+          id?: string;
+          local_name?: string;
+          url?: string;
+          title?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
