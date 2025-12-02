@@ -84,7 +84,7 @@ export function TimerCarousel() {
                     mb: 1,
                     textTransform: "capitalize",
                     fontWeight: isActive ? 600 : 400,
-                    fontSize: isActive ? "2vh" : "1.5vh",
+                    fontSize: isActive ? "4vh" : "2vh",
                     transition: "all 0.3s ease",
                     color: isActive ? "text.primary" : "text.disabled",
                   }}

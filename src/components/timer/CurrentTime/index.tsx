@@ -31,7 +31,7 @@ export function CurrentTime() {
   const periodName = YOGA_PERIOD_NAMES[currentPeriod];
   const periodColor = PERIOD_COLORS[periodName];
 
-  const fontSize = getFitTextSize(timeString.length, 15, 20);
+  const fontSize = getFitTextSize(timeString.length, 20, 35);
 
   return (
     <Box
