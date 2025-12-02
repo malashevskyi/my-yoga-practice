@@ -25,6 +25,8 @@ function App() {
   // Track user activity to restore brightness
   useUserActivity();
 
+  useMuiGhostFix('textarea[aria-hidden="true"].MuiInputBase-inputMultiline');
+
   const gongToPlay = useTimerStore((state) => state.gongToPlay);
   const brightness = useBrightnessStore((state) => state.brightness);
   const themeMode = useThemeStore((state) => state.mode);
