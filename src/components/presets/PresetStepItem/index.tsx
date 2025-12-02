@@ -49,11 +49,24 @@ export function PresetStepItem({
       </Typography>
 
       <FormControl sx={{ minWidth: 120 }}>
-        <InputLabel>{t("presetSteps.type")}</InputLabel>
+        <InputLabel htmlFor={`step-${index}-type`}>
+          {t("presetSteps.type")}
+        </InputLabel>
         <Select
+          id={`step-${index}-type`}
+          name={`step-${index}-type`}
           value={step.type}
           label={t("presetSteps.type")}
           onChange={(e) => onChange(index, "type", e.target.value as TimerType)}
+          sx={{
+            "& .MuiSelect-nativeInput": {
+              display: "none !important",
+            },
+          }}
+          inputProps={{
+            id: `step-${index}-type`,
+            name: `step-${index}-type`,
+          }}
         >
           <MenuItem value="timer">{t("timerTypes.timer")}</MenuItem>
           <MenuItem value="break">{t("timerTypes.break")}</MenuItem>
@@ -62,6 +75,8 @@ export function PresetStepItem({
       </FormControl>
 
       <TextField
+        id={`step-${index}-label`}
+        name={`step-${index}-label`}
         label={t("presetSteps.label")}
         fullWidth
         value={step.label}
@@ -70,9 +85,18 @@ export function PresetStepItem({
       />
 
       <TextField
+        id={`step-${index}-duration`}
+        name={`step-${index}-duration`}
         label={t("presetSteps.duration")}
         type="number"
-        sx={{ width: 140 }}
+        sx={{
+          width: 140,
+
+          "& .MuiOutlinedInput-notchedOutline legend span": {
+            visibility: "hidden",
+            maxWidth: 0,
+          },
+        }}
         defaultValue={Math.round(step.duration / 60)}
         onBlur={(e) => {
           const value = e.target.value;
@@ -89,7 +113,6 @@ export function PresetStepItem({
           }
         }}
         required
-        inputProps={{ min: 1 }}
       />
 
       <IconButton

@@ -1,6 +1,7 @@
 import { Box, GlobalStyles } from "@mui/material";
 import { ThemeSwitcher } from "./components/core/ThemeSwitcher";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
+import { AuthButton } from "./components/core/AuthButton";
 import { ErrorBoundary } from "./components/core/ErrorBoundary";
 import { AppDrawer } from "./components/layout/AppDrawer";
 import { GlobalProgress } from "./components/timer/GlobalProgress";
@@ -11,11 +12,16 @@ import { GongPlayer } from "./components/audio/GongPlayer";
 import { useTimerEngine } from "./hooks/useTimerEngine";
 import { useFavoritePresetAutoload } from "./hooks/useFavoritePresetAutoload";
 import { useUserActivity } from "./hooks/useUserActivity";
+import { useAuthInit } from "./hooks/useAuthInit";
 import { useTimerStore } from "./store/timerStore";
 import { useBrightnessStore } from "./store/brightnessStore";
 import { useThemeStore } from "./store/themeStore";
+import { useMuiGhostFix } from "./hooks/useMuiGhostFix";
 
 function App() {
+  // Initialize authentication state
+  useAuthInit();
+
   // Initialize timer engine
   useTimerEngine();
 
@@ -86,6 +92,7 @@ function App() {
           <AppDrawer />
           <ThemeSwitcher />
           <LanguageSwitcher />
+          <AuthButton />
         </Box>
 
         {/* Current Time with Yoga Period Indicator */}

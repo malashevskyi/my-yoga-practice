@@ -47,5 +47,9 @@
     "noVideos": "No videos available yet.",
     "loadingError": "Failed to load videos",
     "watch": "Watch"
+  },
+  "auth": {
+    "loginRequired": "Login Required",
+    "loginRequiredDescription": "Please log in to access this feature. Click the login button in the top right corner."
   }
 }

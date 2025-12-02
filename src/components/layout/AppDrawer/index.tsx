@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { HistoryList } from "../../history/HistoryList";
 import { PresetsList } from "../../presets/PresetsList";
 import { VideosList } from "../../videos/VideosList";
+import { AuthTabWrapper } from "../../auth/AuthTabWrapper";
 import { useDrawerStore } from "../../../store/drawerStore";
 
 interface TabPanelProps {
@@ -88,7 +89,9 @@ export function AppDrawer() {
 
           {/* Presets Tab */}
           <TabPanel value={tabValue} index={0}>
-            <PresetsList />
+            <AuthTabWrapper>
+              <PresetsList />
+            </AuthTabWrapper>
           </TabPanel>
 
           {/* Videos Tab */}
@@ -98,7 +101,9 @@ export function AppDrawer() {
 
           {/* History Tab */}
           <TabPanel value={tabValue} index={2}>
-            <HistoryList />
+            <AuthTabWrapper>
+              <HistoryList />
+            </AuthTabWrapper>
           </TabPanel>
         </Box>
       </Drawer>

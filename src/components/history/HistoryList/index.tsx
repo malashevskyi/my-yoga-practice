@@ -5,14 +5,12 @@ import {
   ListItem,
   ListItemText,
   Divider,
-  Button,
 } from "@mui/material";
 import { useHistoryStore } from "../../../store/historyStore";
 import { formatTime } from "../../../utils/formatTime";
 
 export function HistoryList() {
   const sessions = useHistoryStore((state) => state.sessions);
-  const clearHistory = useHistoryStore((state) => state.clearHistory);
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -36,29 +34,6 @@ export function HistoryList() {
 
   return (
     <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-        }}
-      >
-        <Typography variant="subtitle1" fontWeight={600}>
-          Completed Timers
-        </Typography>
-        {sessions.length > 0 && (
-          <Button
-            size="small"
-            color="error"
-            onClick={clearHistory}
-            sx={{ textTransform: "none" }}
-          >
-            Clear All
-          </Button>
-        )}
-      </Box>
-
       {sessions.length === 0 ? (
         <Typography variant="body2" color="text.secondary" align="center">
           No completed timers yet.

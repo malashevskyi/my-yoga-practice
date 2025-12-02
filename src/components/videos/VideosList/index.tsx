@@ -12,11 +12,13 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { getVideos } from "../../../api/videos";
+import { useAuthStore } from "../../../store/authStore";
 import { VideoDialog } from "../VideoDialog";
 import type { Video } from "../../../types/video";
 
 export function VideosList() {
   const { t } = useTranslation();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [activeVideo, setActiveVideo] = useState<Video | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -27,6 +29,7 @@ export function VideosList() {
   } = useQuery({
     queryKey: ["videos"],
     queryFn: getVideos,
+    enabled: isAuthenticated, // Only fetch when authenticated
   });
 
   const handleVideoClick = (video: Video) => {
@@ -37,6 +40,15 @@ export function VideosList() {
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
   };
+
+  // Don't show loading for unauthenticated users
+  if (!isAuthenticated) {
+    return (
+      <Typography variant="body2" color="text.secondary" align="center">
+        {t("auth.loginRequired")}
+      </Typography>
+    );
+  }
 
   if (isLoading) {
     return (

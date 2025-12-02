@@ -10,14 +10,17 @@ export function PresetBasicInfo() {
   return (
     <>
       <TextField
+        id="preset-name"
         label={t("createPreset.name")}
         fullWidth
+        autoComplete="false"
         {...nameField}
         sx={{ mb: 2 }}
         required
       />
 
       <TextField
+        id={descriptionField.name}
         label={t("createPreset.description")}
         fullWidth
         multiline
