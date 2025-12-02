@@ -1,7 +1,13 @@
 {
   "title": "Yoga Timer",
-  "settings": "Settings",
   "language": "Language",
+  "settings": {
+    "title": "Settings",
+    "displaySettings": "Display Settings",
+    "autoDimTitle": "Auto-dim during timer",
+    "autoDimDescription": "Automatically reduce screen brightness when timer is running",
+    "brightnessNote": "You can always adjust brightness manually using the slider below the timer"
+  },
   "menu": {
     "title": "Menu",
     "presets": "Presets",

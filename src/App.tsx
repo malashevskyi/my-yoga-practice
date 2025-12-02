@@ -4,6 +4,7 @@ import { LoginButton } from "./components/core/LoginButton";
 import { LogoutButton } from "./components/core/LogoutButton";
 import { ErrorBoundary } from "./components/core/ErrorBoundary";
 import { AppDrawerWrapper } from "./components/layout/AppDrawerWrapper";
+import { SettingsDrawer } from "./components/layout/SettingsDrawer";
 import { GlobalProgress } from "./components/timer/GlobalProgress";
 import { CurrentTime } from "./components/timer/CurrentTime";
 import { TimerCarousel } from "./components/timer/TimerCarousel";
@@ -81,6 +82,7 @@ function App() {
           }}
         >
           <AppDrawerWrapper />
+          <SettingsDrawer />
           <LanguageSwitcher />
           {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </Box>
