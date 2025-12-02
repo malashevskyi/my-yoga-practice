@@ -48,8 +48,17 @@
     "loadingError": "Failed to load videos",
     "watch": "Watch"
   },
-  "auth": {
-    "loginRequired": "Login Required",
-    "loginRequiredDescription": "Please log in to access this feature. Click the login button in the top right corner."
+  "guest": {
+    "loginPromptTitle": "Sign In for More Features",
+    "loginPromptFeatures": "Get access to",
+    "featureCreatePresets": "Create custom presets",
+    "featureAddVideos": "Add yoga videos",
+    "featureHistory": "Timer history & Clockify sync",
+    "signInButton": "Sign In"
+  },
+  "defaultPresets": {
+    "preset1Name": "10 minutes kirtan & 20 minutes meditation",
+    "preset2Name": "20 minutes kirtan & 20 minutes meditation",
+    "preset3Name": "3x: 20 minutes kirtan & 20 minutes meditation"
   }
 }

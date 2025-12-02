@@ -21,7 +21,6 @@ import { usePresets } from "../../../hooks/usePresets";
 import { useTimerStore } from "../../../store/timerStore";
 import { useFavoritePresetStore } from "../../../store/favoritePresetStore";
 import { formatTime } from "../../../utils/formatTime";
-import { isDevMode } from "../../../lib/supabase";
 import { useState } from "react";
 import type { TimerStep } from "../../../types/timer";
 import { CreatePresetDialog } from "../CreatePresetDialog";
@@ -31,6 +30,7 @@ export function PresetsList() {
   const { t } = useTranslation();
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const setQueue = useTimerStore((state) => state.setQueue);
+  const queue = useTimerStore((state) => state.queue);
   const favoritePresetId = useFavoritePresetStore(
     (state) => state.favoritePresetId,
   );
@@ -45,6 +45,12 @@ export function PresetsList() {
     setQueue(presetSteps);
   };
 
+  // Check if current queue matches a preset
+  const isPresetActive = (presetSteps: TimerStep[]) => {
+    if (queue.length !== presetSteps.length) return false;
+    return queue.every((step, index) => step.id === presetSteps[index].id);
+  };
+
   const handleDeletePreset = (e: React.MouseEvent, presetId: string) => {
     e.stopPropagation();
     if (confirm(t("presets.deleteConfirm"))) {
@@ -52,6 +58,13 @@ export function PresetsList() {
       if (presetId === favoritePresetId) {
         setFavoritePreset(null, null);
       }
+
+      // If deleting active preset, clear the queue
+      const preset = presets?.find((p) => p.id === presetId);
+      if (preset && isPresetActive(preset.steps)) {
+        setQueue([]);
+      }
+
       deleteMutation.mutate(presetId);
     }
   };
@@ -97,17 +110,15 @@ export function PresetsList() {
         <Typography variant="subtitle1" fontWeight={600}>
           {t("presets.title")}
         </Typography>
-        {isDevMode && (
-          <Button
-            size="small"
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateDialogOpen(true)}
-            sx={{ textTransform: "none" }}
-          >
-            {t("presets.create")}
-          </Button>
-        )}
+        <Button
+          size="small"
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setCreateDialogOpen(true)}
+          sx={{ textTransform: "none" }}
+        >
+          {t("presets.create")}
+        </Button>
       </Box>
 
       {!presets || presets.length === 0 ? (
@@ -136,20 +147,21 @@ export function PresetsList() {
                       <StarBorderIcon />
                     )}
                   </IconButton>
-                  {isDevMode && (
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={(e) => handleDeletePreset(e, preset.id)}
-                      disabled={deleteMutation.isPending}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={(e) => handleDeletePreset(e, preset.id)}
+                    disabled={deleteMutation.isPending}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </Box>
               }
             >
-              <ListItemButton onClick={() => handleSelectPreset(preset.steps)}>
+              <ListItemButton
+                onClick={() => handleSelectPreset(preset.steps)}
+                selected={isPresetActive(preset.steps)}
+              >
                 <ListItemText
                   primary={preset.name}
                   secondary={
@@ -185,12 +197,10 @@ export function PresetsList() {
         </List>
       )}
 
-      {isDevMode && (
-        <CreatePresetDialog
-          open={createDialogOpen}
-          onClose={() => setCreateDialogOpen(false)}
-        />
-      )}
+      <CreatePresetDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+      />
     </>
   );
 }

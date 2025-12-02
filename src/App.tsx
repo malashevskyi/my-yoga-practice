@@ -3,7 +3,7 @@ import { ThemeSwitcher } from "./components/core/ThemeSwitcher";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
 import { AuthButton } from "./components/core/AuthButton";
 import { ErrorBoundary } from "./components/core/ErrorBoundary";
-import { AppDrawer } from "./components/layout/AppDrawer";
+import { AppDrawerWrapper } from "./components/layout/AppDrawerWrapper";
 import { GlobalProgress } from "./components/timer/GlobalProgress";
 import { CurrentTime } from "./components/timer/CurrentTime";
 import { TimerCarousel } from "./components/timer/TimerCarousel";
@@ -89,7 +89,7 @@ function App() {
             gap: 1,
           }}
         >
-          <AppDrawer />
+          <AppDrawerWrapper />
           <ThemeSwitcher />
           <LanguageSwitcher />
           <AuthButton />
