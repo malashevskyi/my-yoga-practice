@@ -1,6 +1,9 @@
 import { createTheme, type ThemeOptions } from "@mui/material/styles";
 
 const darkThemeOptions: ThemeOptions = {
+  typography: {
+    fontFamily: "Montserrat, sans-serif",
+  },
   palette: {
     mode: "dark",
     primary: {
