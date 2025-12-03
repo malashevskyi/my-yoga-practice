@@ -92,7 +92,12 @@ export function VideoDialog({ video, open, onClose }: VideoDialogProps) {
       </IconButton>
 
       <DialogContent
-        sx={{ p: 0, "&:first-of-type": { pt: 0 }, height: "100%" }}
+        sx={{
+          p: 0,
+          "&:first-of-type": { pt: 0 },
+          height: "100%",
+          overflow: "hidden",
+        }}
       >
         <Box sx={{ position: "relative", height: "100%" }}>
           {videoId && <VideoPlayer ref={playerRef} videoId={videoId} />}
