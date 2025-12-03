@@ -1,10 +1,9 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-const MIN_BRIGHTNESS = 40;
+import { MIN_BRIGHTNESS } from "../common/constants";
 
 interface BrightnessStore {
-  brightness: number; // 40-100
+  brightness: number; // 60-100
   userBrightness: number; // User's preferred brightness when slider is used
   isAutoDimmed: boolean; // Whether brightness is currently auto-dimmed
   setBrightness: (value: number) => void;
@@ -34,7 +33,7 @@ export const useBrightnessStore = create<BrightnessStore>()(
 
       setAutoDim: (dimmed) => {
         if (dimmed) {
-          // Auto-dim to minimum (40)
+          // Auto-dim to minimum (60)
           set({ brightness: MIN_BRIGHTNESS, isAutoDimmed: true });
         } else {
           // Restore to user's preferred brightness

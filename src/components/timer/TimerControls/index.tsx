@@ -10,9 +10,7 @@ import {
 } from "@mui/icons-material";
 import { useTimerStore } from "../../../store/timerStore";
 import { useBrightnessStore } from "../../../store/brightnessStore";
-
-export const MIN_BRIGHTNESS = 40;
-export const MAX_BRIGHTNESS = 100;
+import { MAX_BRIGHTNESS, MIN_BRIGHTNESS } from "../../../common/constants";
 
 export function TimerControls() {
   const status = useTimerStore((state) => state.status);
