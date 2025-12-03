@@ -20,8 +20,8 @@ import { LoginButton } from "../../core/LoginButton";
 export function AppDrawerGuest() {
   const { t } = useTranslation();
 
-  const isOpen = useDrawerStore((state) => state.isOpen);
-  const setIsOpen = useDrawerStore((state) => state.setIsOpen);
+  const isOpen = useDrawerStore((state) => state.isAppDrawerOpen);
+  const setIsOpen = useDrawerStore((state) => state.setAppDrawerOpen);
   const setQueue = useTimerStore((state) => state.setQueue);
   const queue = useTimerStore((state) => state.queue);
 

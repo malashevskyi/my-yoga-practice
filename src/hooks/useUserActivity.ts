@@ -14,8 +14,14 @@ import { useSettingsStore } from "../store/settingsStore";
  */
 export function useUserActivity() {
   const status = useTimerStore((state) => state.status);
-  const isDrawerOpen = useDrawerStore((state) => state.isOpen);
+  const isAppDrawerOpen = useDrawerStore((state) => state.isAppDrawerOpen);
+  const isSettingsDrawerOpen = useDrawerStore(
+    (state) => state.isSettingsDrawerOpen,
+  );
   const autoDimEnabled = useSettingsStore((state) => state.autoDimEnabled);
+
+  // Calculate if any drawer is open
+  const isAnyDrawerOpen = isAppDrawerOpen || isSettingsDrawerOpen;
 
   // On mount, restore saved brightness (don't override with 100%)
   useEffect(() => {
@@ -29,7 +35,7 @@ export function useUserActivity() {
 
     // If drawer is open AND auto-dim is enabled, temporarily set to 100%
     // (if auto-dim is disabled, user's manual brightness should be preserved)
-    if (isDrawerOpen) {
+    if (isAnyDrawerOpen) {
       if (autoDimEnabled) {
         brightnessStore.setTemporaryBrightness(100);
       }
@@ -44,5 +50,5 @@ export function useUserActivity() {
       // Timer is paused, completed, idle, or auto-dim is disabled - restore brightness
       brightnessStore.restoreBrightness();
     }
-  }, [status, isDrawerOpen, autoDimEnabled]);
+  }, [status, isAnyDrawerOpen, autoDimEnabled]);
 }

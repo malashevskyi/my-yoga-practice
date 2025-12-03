@@ -7,6 +7,7 @@ interface BrightnessStore {
   userBrightness: number; // User's preferred brightness when slider is used
   isAutoDimmed: boolean; // Whether brightness is currently auto-dimmed
   setBrightness: (value: number) => void;
+  setTemporaryBrightness: (value: number) => void;
   setAutoDim: (dimmed: boolean) => void;
   restoreBrightness: () => void;
 }
@@ -29,6 +30,11 @@ export const useBrightnessStore = create<BrightnessStore>()(
         if (value === 100) {
           localStorage.removeItem("yoga-timer-brightness");
         }
+      },
+
+      setTemporaryBrightness: (value) => {
+        // Set brightness temporarily without saving as user preference
+        set({ brightness: value, isAutoDimmed: false });
       },
 
       setAutoDim: (dimmed) => {

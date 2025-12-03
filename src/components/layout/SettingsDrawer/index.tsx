@@ -11,13 +11,14 @@ import {
   Settings as SettingsIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSettingsStore } from "../../../store/settingsStore";
+import { useDrawerStore } from "../../../store/drawerStore";
 
 export function SettingsDrawer() {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useDrawerStore((state) => state.isSettingsDrawerOpen);
+  const setIsOpen = useDrawerStore((state) => state.setSettingsDrawerOpen);
   const autoDimEnabled = useSettingsStore((state) => state.autoDimEnabled);
   const setAutoDimEnabled = useSettingsStore(
     (state) => state.setAutoDimEnabled,

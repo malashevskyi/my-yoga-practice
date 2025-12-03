@@ -30,8 +30,8 @@ export function AppDrawer() {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
 
-  const isOpen = useDrawerStore((state) => state.isOpen);
-  const setIsOpen = useDrawerStore((state) => state.setIsOpen);
+  const isOpen = useDrawerStore((state) => state.isAppDrawerOpen);
+  const setIsOpen = useDrawerStore((state) => state.setAppDrawerOpen);
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
