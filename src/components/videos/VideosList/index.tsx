@@ -6,36 +6,40 @@ import {
   ListItemButton,
   ListItemText,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
-import { useQuery } from "@tanstack/react-query";
+import AddIcon from "@mui/icons-material/Add";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getVideos } from "../../../api/videos";
 import { VideoDialog } from "../VideoDialog";
+import { CreateVideoDialog } from "../CreateVideoDialog";
+import { useVideos } from "../../../hooks/useVideos";
 import type { Video } from "../../../types/video";
 
 export function VideosList() {
   const { t } = useTranslation();
   const [activeVideo, setActiveVideo] = useState<Video | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isVideoDialogOpen, setIsVideoDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-  const {
-    data: videos = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["videos"],
-    queryFn: getVideos,
-  });
+  const { data: videos = [], isLoading, error } = useVideos();
 
   const handleVideoClick = (video: Video) => {
     setActiveVideo(video);
-    setIsDialogOpen(true);
+    setIsVideoDialogOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
+  const handleCloseVideoDialog = () => {
+    setIsVideoDialogOpen(false);
+  };
+
+  const handleOpenCreateDialog = () => {
+    setIsCreateDialogOpen(true);
+  };
+
+  const handleCloseCreateDialog = () => {
+    setIsCreateDialogOpen(false);
   };
 
   if (isLoading) {
@@ -63,6 +67,19 @@ export function VideosList() {
 
   return (
     <>
+      {/* Create Video Button */}
+      <Box sx={{ mb: 2 }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          fullWidth
+          onClick={handleOpenCreateDialog}
+          sx={{ textTransform: "none" }}
+        >
+          {t("videos.addVideo")}
+        </Button>
+      </Box>
+
       {videos.length === 0 ? (
         <Typography variant="body2" color="text.secondary" align="center">
           {t("videos.noVideos")}
@@ -98,8 +115,13 @@ export function VideosList() {
 
       <VideoDialog
         video={activeVideo}
-        open={isDialogOpen}
-        onClose={handleCloseDialog}
+        open={isVideoDialogOpen}
+        onClose={handleCloseVideoDialog}
+      />
+
+      <CreateVideoDialog
+        open={isCreateDialogOpen}
+        onClose={handleCloseCreateDialog}
       />
     </>
   );

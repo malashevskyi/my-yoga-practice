@@ -44,3 +44,9 @@ export async function getVideos() {
   const result = await fn();
   return result.data as { videos: Video[] };
 }
+
+export async function createVideo(data: { title: string; url: string }) {
+  const fn = httpsCallable(functions, "createVideo");
+  const result = await fn(data);
+  return result.data as { video: Video };
+}

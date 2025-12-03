@@ -21,3 +21,4 @@ export { deletePreset } from "./presets/deletePreset";
 
 // Videos
 export { getVideos } from "./videos/getVideos";
+export { createVideo } from "./videos/createVideo";

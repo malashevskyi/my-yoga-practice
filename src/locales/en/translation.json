@@ -15,8 +15,7 @@
     "history": "History"
   },
   "presets": {
-    "title": "Available Presets",
-    "create": "Create",
+    "create": "Add Preset",
     "delete": "Delete",
     "noPresets": "No presets available yet.",
     "steps": "steps",
@@ -50,7 +49,16 @@
   "videos": {
     "noVideos": "No videos available yet.",
     "loadingError": "Failed to load videos",
-    "watch": "Watch"
+    "watch": "Watch",
+    "addVideo": "Add New Video"
+  },
+  "createVideo": {
+    "title": "Add New Video",
+    "titleLabel": "Video Title",
+    "urlLabel": "YouTube URL",
+    "cancel": "Cancel",
+    "create": "Add New Video",
+    "creating": "Adding..."
   },
   "guest": {
     "loginPromptTitle": "Sign In for More Features",

@@ -107,13 +107,10 @@ export function PresetsList() {
           mb: 2,
         }}
       >
-        <Typography variant="subtitle1" fontWeight={600}>
-          {t("presets.title")}
-        </Typography>
         <Button
-          size="small"
           variant="contained"
           startIcon={<AddIcon />}
+          fullWidth
           onClick={() => setCreateDialogOpen(true)}
           sx={{ textTransform: "none" }}
         >
