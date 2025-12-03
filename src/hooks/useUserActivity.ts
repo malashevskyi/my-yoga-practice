@@ -7,10 +7,10 @@ import { useSettingsStore } from "../store/settingsStore";
 /**
  * Hook to automatically manage brightness based on timer and drawer state
  * Simple logic:
- * - If drawer is open -> full brightness
+ * - If drawer is open -> always 100% brightness (drawers must be fully visible)
  * - If drawer is closed AND timer is running AND auto-dim is enabled -> dimmed brightness
- * - If timer is paused or completed -> full brightness
- * - Otherwise -> full brightness
+ * - If timer is paused or completed -> restore user's brightness
+ * - Otherwise -> restore user's brightness
  */
 export function useUserActivity() {
   const status = useTimerStore((state) => state.status);
@@ -33,12 +33,10 @@ export function useUserActivity() {
   useEffect(() => {
     const brightnessStore = useBrightnessStore.getState();
 
-    // If drawer is open AND auto-dim is enabled, temporarily set to 100%
-    // (if auto-dim is disabled, user's manual brightness should be preserved)
+    // If drawer is open, always set to 100% temporarily
+    // (drawers should always be fully visible)
     if (isAnyDrawerOpen) {
-      if (autoDimEnabled) {
-        brightnessStore.setTemporaryBrightness(100);
-      }
+      brightnessStore.setTemporaryBrightness(100);
       return;
     }
 
