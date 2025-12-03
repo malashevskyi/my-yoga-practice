@@ -27,14 +27,17 @@ export function useUserActivity() {
   useEffect(() => {
     const brightnessStore = useBrightnessStore.getState();
 
-    // If drawer is open, always restore brightness
+    // If drawer is open AND auto-dim is enabled, temporarily set to 100%
+    // (if auto-dim is disabled, user's manual brightness should be preserved)
     if (isDrawerOpen) {
-      brightnessStore.restoreBrightness();
+      if (autoDimEnabled) {
+        brightnessStore.setTemporaryBrightness(100);
+      }
       return;
     }
 
     // If drawer is closed and timer is running and auto-dim is enabled, auto-dim
-    // Otherwise (paused, completed, idle, or auto-dim disabled) restore full brightness
+    // Otherwise (paused, completed, idle, or auto-dim disabled) restore brightness
     if (status === "running" && autoDimEnabled) {
       brightnessStore.setAutoDim(true);
     } else {

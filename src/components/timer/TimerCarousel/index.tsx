@@ -1,7 +1,7 @@
 import { useWindowSize } from "react-use";
 import { Box, Typography, ButtonBase } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/formatTime";
 import { VerticalScrollWrapper } from "../../shared/VerticalScrollWrapper";
@@ -24,6 +24,42 @@ export function TimerCarousel() {
     index: number;
     color: "success" | "error";
   } | null>(null);
+
+  // Track pointer position to distinguish click from drag
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const DRAG_THRESHOLD = 10; // pixels - if moved more than this, it's a drag
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    pointerStart.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const handlePointerUp = (
+    e: React.PointerEvent,
+    index: number,
+    isLeftHalf: boolean,
+  ) => {
+    if (!pointerStart.current) return;
+
+    // Calculate distance moved
+    const deltaX = Math.abs(e.clientX - pointerStart.current.x);
+    const deltaY = Math.abs(e.clientY - pointerStart.current.y);
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    // Reset pointer start
+    pointerStart.current = null;
+
+    // If moved more than threshold, it was a drag - don't adjust timer
+    if (distance > DRAG_THRESHOLD) {
+      return;
+    }
+
+    // It was a click - adjust timer
+    if (isLeftHalf) {
+      handleDecrease(index);
+    } else {
+      handleIncrease(index);
+    }
+  };
 
   const handleDecrease = (index: number) => {
     adjustTimerDuration(index, -1); // Subtract 1 minute
@@ -173,7 +209,8 @@ export function TimerCarousel() {
                   >
                     {/* Left button - decrease time */}
                     <ButtonBase
-                      onClick={() => handleDecrease(index)}
+                      onPointerDown={handlePointerDown}
+                      onPointerUp={(e) => handlePointerUp(e, index, true)}
                       sx={{
                         flex: 1,
                       }}
@@ -182,7 +219,8 @@ export function TimerCarousel() {
 
                     {/* Right button - increase time */}
                     <ButtonBase
-                      onClick={() => handleIncrease(index)}
+                      onPointerDown={handlePointerDown}
+                      onPointerUp={(e) => handlePointerUp(e, index, false)}
                       sx={{
                         flex: 1,
                       }}
