@@ -25,17 +25,21 @@ I built this project to streamline yoga practice for my wife and me. We wanted t
 - **Timer Navigation** - Skip forward/backward through timer queue
 - **Loop Mode** - Automatically restart timer sequence when complete
 - **Yoga Period Indicator** - Color-coded display showing current yoga period (4 daily periods, useful for some practice)
-  <img src="public/docs/screenshot_1.png" alt="Main Timer" width="600">
+
+<img src="public/docs/screenshot_1.png" alt="Main Timer" width="600">
 
 - **Background Dimming** - Automatic screen dimming during meditation sessions (for dark mornings and evenings)
 - **Clockify Integration** - Automatic time tracking to Clockify workspace
 - **Watch Time Tracking** - Automatically track video viewing time to Clockify
-  <img src="public/docs/screenshot_2.png" alt="Main Timer" width="600">
+
+<img src="public/docs/screenshot_2.png" alt="Main Timer" width="600">
 
 - **Custom Presets** - Create and save your own timer sequences
 - **Favorite Preset** - Mark one preset to auto-load on startup
 - **YouTube Player** - Save your favorite yoga videos for quick access (some music for the practice or some yoga dance videos)
-  <img src="public/docs/screenshot_3.png" alt="Main Timer" width="600">
+
+<img src="public/docs/screenshot_3.png" alt="Main Timer" width="600">
 
 - **Responsive Design** - Works on desktop, tablet, and mobile devices
-  <img src="public/docs/screenshot_4.png" alt="Main Timer" width="400">
+
+<img src="public/docs/screenshot_4.png" alt="Main Timer" width="400">
