@@ -6,7 +6,24 @@
     "displaySettings": "Display Settings",
     "autoDimTitle": "Auto-dim during timer",
     "autoDimDescription": "Automatically reduce screen brightness when timer is running",
-    "brightnessNote": "You can always adjust brightness manually using the slider below the timer"
+    "brightnessNote": "You can always adjust brightness manually using the slider below the timer",
+    "trackingSettings": "Time Tracking",
+    "clockifyApiKey": "Clockify API Key",
+    "clockifyApiKeyHelp": "Your personal API key from Clockify settings",
+    "clockifyApiKeyPlaceholder": "Enter your Clockify API key",
+    "clockifyWorkspaceId": "Workspace ID",
+    "clockifyWorkspaceIdHelp": "The ID of your Clockify workspace",
+    "clockifyWorkspaceIdPlaceholder": "Enter workspace ID",
+    "clockifyProject": "Project Name",
+    "clockifyProjectPlaceholder": "My Yoga Practice",
+    "clockifyProjectHelp": "Timer durations will be automatically logged to this project",
+    "saveProject": "Save Settings",
+    "saving": "Saving...",
+    "projectUpdated": "Settings updated successfully",
+    "projectUpdateError": "Failed to update settings",
+    "projectNameRequired": "Project name is required",
+    "allFieldsRequired": "All fields are required",
+    "loadSettingsError": "Failed to load user settings"
   },
   "menu": {
     "title": "Menu",
@@ -21,7 +38,11 @@
     "steps": "steps",
     "total": "Total",
     "deleteConfirm": "Are you sure you want to delete this preset?",
-    "loadingError": "Failed to load presets"
+    "loadingError": "Failed to load presets",
+    "createSuccess": "Preset created successfully",
+    "createError": "Failed to create preset",
+    "deleteSuccess": "Preset deleted successfully",
+    "deleteError": "Failed to delete preset"
   },
   "createPreset": {
     "title": "Create New Preset",
@@ -50,12 +71,24 @@
     "noVideos": "No videos available yet.",
     "loadingError": "Failed to load videos",
     "watch": "Watch",
-    "addVideo": "Add New Video"
+    "addVideo": "Add New Video",
+    "createSuccess": "Video created successfully",
+    "createError": "Failed to create video"
+  },
+  "history": {
+    "noTimers": "No completed timers yet.",
+    "startTimer": "Start a timer to see your history here.",
+    "loadError": "Failed to load history. Please try again later.",
+    "needsConfiguration": "To track your timer history, please configure Clockify settings (API key, workspace ID, and project name).",
+    "openSettings": "Open Settings",
+    "loadMore": "Load More",
+    "loading": "Loading..."
   },
   "createVideo": {
     "title": "Add New Video",
     "titleLabel": "Video Title",
     "urlLabel": "YouTube URL",
+    "urlPlaceholder": "https://www.youtube.com/watch?v=...",
     "cancel": "Cancel",
     "create": "Add New Video",
     "creating": "Adding..."
@@ -70,11 +103,24 @@
   },
   "auth": {
     "login": "Sign In",
-    "logout": "Sign Out"
+    "logout": "Sign Out",
+    "loginSuccess": "Successfully logged in",
+    "logoutSuccess": "Successfully logged out",
+    "loginError": "Failed to sign in",
+    "logoutError": "Failed to sign out",
+    "syncError": "Failed to sync user data"
   },
   "defaultPresets": {
     "preset1Name": "10 minutes kirtan & 20 minutes meditation",
     "preset2Name": "20 minutes kirtan & 20 minutes meditation",
     "preset3Name": "3x: 20 minutes kirtan & 20 minutes meditation"
+  },
+  "tracking": {
+    "trackError": "Failed to track time to Clockify"
+  },
+  "errors": {
+    "gongPlayError": "Failed to play gong sound",
+    "youtubeStopError": "Error stopping YouTube video",
+    "youtubeDestroyError": "Error destroying YouTube player"
   }
 }

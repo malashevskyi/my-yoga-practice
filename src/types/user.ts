@@ -4,3 +4,10 @@ export interface User {
   displayName: string | null;
   createdAt: string;
 }
+
+export interface UserSettings {
+  user: string;
+  trackingProjectName: string | null;
+  clockifyApiKey: string | null;
+  clockifyWorkspaceId: string | null;
+}

@@ -14,6 +14,10 @@ setGlobalOptions({ maxInstances: 10 });
 // Auth
 export { createOrUpdateUser } from "./auth/createOrUpdateUser";
 
+// Settings
+export { getUserSettings } from "./settings/getUserSettings";
+export { updateUserSettings } from "./settings/updateUserSettings";
+
 // Presets
 export { getPresets } from "./presets/getPresets";
 export { createPreset } from "./presets/createPreset";
@@ -22,3 +26,7 @@ export { deletePreset } from "./presets/deletePreset";
 // Videos
 export { getVideos } from "./videos/getVideos";
 export { createVideo } from "./videos/createVideo";
+
+// Tracking
+export { trackTime } from "./tracking/trackTime";
+export { getHistory } from "./tracking/getHistory";

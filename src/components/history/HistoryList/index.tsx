@@ -4,16 +4,30 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
+  CircularProgress,
+  Button,
 } from "@mui/material";
-import { useHistoryStore } from "../../../store/historyStore";
+import { useTranslation } from "react-i18next";
+import { useClockifyHistory } from "../../../hooks/useClockifyHistory";
 import { formatTime } from "../../../utils/formatTime";
+import { useDrawerStore } from "../../../store/drawerStore";
 
 export function HistoryList() {
-  const sessions = useHistoryStore((state) => state.sessions);
+  const { t } = useTranslation();
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useClockifyHistory();
+  const setSettingsDrawerOpen = useDrawerStore(
+    (state) => state.setSettingsDrawerOpen,
+  );
 
-  const formatDate = (timestamp: number) => {
-    const date = new Date(timestamp);
+  const formatDate = (isoString: string) => {
+    const date = new Date(isoString);
     const today = new Date();
     const isToday = date.toDateString() === today.toDateString();
 
@@ -32,45 +46,96 @@ export function HistoryList() {
     });
   };
 
+  const handleOpenSettings = () => {
+    setSettingsDrawerOpen(true);
+  };
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          py: 4,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Typography variant="body2" color="error" align="center">
+        {t("history.loadError")}
+      </Typography>
+    );
+  }
+
+  // Check first page for configuration status
+  const firstPage = data?.pages[0];
+  if (firstPage?.needsConfiguration) {
+    return (
+      <Box sx={{ textAlign: "center", py: 4 }}>
+        <Typography variant="body2" color="text.secondary" gutterBottom>
+          {t("history.needsConfiguration")}
+        </Typography>
+        <Button
+          variant="outlined"
+          onClick={handleOpenSettings}
+          sx={{ mt: 2, textTransform: "none" }}
+        >
+          {t("history.openSettings")}
+        </Button>
+      </Box>
+    );
+  }
+
+  // Flatten all pages into single history array
+  const allHistory = data?.pages.flatMap((page) => page.history) || [];
+
   return (
     <>
-      {sessions.length === 0 ? (
+      {allHistory.length === 0 ? (
         <Typography variant="body2" color="text.secondary" align="center">
-          No completed timers yet.
+          {t("history.noTimers")}
           <br />
-          Start a timer to see your history here.
+          {t("history.startTimer")}
         </Typography>
       ) : (
-        <List>
-          {sessions
-            .slice()
-            .reverse()
-            .map((session) => (
-              <Box key={session.id} sx={{ mb: 5 }}>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ px: 2 }}
-                >
-                  Session: {formatDate(session.startedAt)}
-                </Typography>
-                <Divider sx={{ my: 1 }} />
-                {session.completedTimers.map((timer) => (
-                  <ListItem key={timer.id}>
-                    <ListItemText
-                      primary={timer.step.label}
-                      secondary={`${formatTime(
-                        timer.step.duration,
-                      )} • ${formatDate(timer.completedAt)}`}
-                      primaryTypographyProps={{
-                        fontWeight: 500,
-                      }}
-                    />
-                  </ListItem>
-                ))}
-              </Box>
+        <>
+          <List>
+            {allHistory.map((entry) => (
+              <ListItem key={entry.id}>
+                <ListItemText
+                  primary={entry.label}
+                  secondary={`${formatTime(entry.duration)} • ${formatDate(
+                    entry.completedAt,
+                  )}`}
+                  primaryTypographyProps={{
+                    fontWeight: 500,
+                  }}
+                />
+              </ListItem>
             ))}
-        </List>
+          </List>
+
+          {hasNextPage && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                sx={{ textTransform: "none" }}
+              >
+                {isFetchingNextPage
+                  ? t("history.loading")
+                  : t("history.loadMore")}
+              </Button>
+            </Box>
+          )}
+        </>
       )}
     </>
   );

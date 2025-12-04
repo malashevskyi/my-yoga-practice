@@ -123,7 +123,7 @@ export function CreateVideoDialog({ open, onClose }: CreateVideoDialogProps) {
                   label={t("createVideo.urlLabel")}
                   fullWidth
                   required
-                  placeholder="https://www.youtube.com/watch?v=..."
+                  placeholder={t("createVideo.urlPlaceholder")}
                   error={touched.url && Boolean(errors.url)}
                   helperText={touched.url && errors.url}
                 />

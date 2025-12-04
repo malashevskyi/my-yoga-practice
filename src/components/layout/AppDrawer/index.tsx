@@ -6,6 +6,7 @@ import { HistoryList } from "../../history/HistoryList";
 import { PresetsList } from "../../presets/PresetsList";
 import { VideosList } from "../../videos/VideosList";
 import { useDrawerStore } from "../../../store/drawerStore";
+import { useAuthStore } from "../../../store/authStore";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -29,6 +30,7 @@ function TabPanel({ children, value, index }: TabPanelProps) {
 export function AppDrawer() {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = useState(0);
+  const user = useAuthStore((state) => state.user);
 
   const isOpen = useDrawerStore((state) => state.isAppDrawerOpen);
   const setIsOpen = useDrawerStore((state) => state.setAppDrawerOpen);
@@ -85,21 +87,24 @@ export function AppDrawer() {
               <Tab label={t("menu.history")} />
             </Tabs>
           </Box>
+          {user && (
+            <>
+              {/* Presets Tab */}
+              <TabPanel value={tabValue} index={0}>
+                <PresetsList />
+              </TabPanel>
 
-          {/* Presets Tab */}
-          <TabPanel value={tabValue} index={0}>
-            <PresetsList />
-          </TabPanel>
+              {/* Videos Tab */}
+              <TabPanel value={tabValue} index={1}>
+                <VideosList />
+              </TabPanel>
 
-          {/* Videos Tab */}
-          <TabPanel value={tabValue} index={1}>
-            <VideosList />
-          </TabPanel>
-
-          {/* History Tab */}
-          <TabPanel value={tabValue} index={2}>
-            <HistoryList />
-          </TabPanel>
+              {/* History Tab */}
+              <TabPanel value={tabValue} index={2}>
+                <HistoryList />
+              </TabPanel>
+            </>
+          )}
         </Box>
       </Drawer>
     </>

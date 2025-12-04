@@ -22,7 +22,7 @@ export function LoginButton({
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
       console.error("Login error:", error);
-      toast.error("Failed to sign in");
+      toast.error(t("auth.loginError"));
     }
   };
 

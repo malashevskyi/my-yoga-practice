@@ -23,10 +23,10 @@ export function LogoutButton({
     try {
       await signOut(auth);
       logout();
-      toast.success("Successfully logged out");
+      toast.success(t("auth.logoutSuccess"));
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Failed to sign out");
+      toast.error(t("auth.logoutError"));
     }
   };
 

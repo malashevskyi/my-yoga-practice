@@ -6,14 +6,21 @@ import {
   FormControlLabel,
   Checkbox,
   Divider,
+  TextField,
+  Button,
+  CircularProgress,
 } from "@mui/material";
 import {
   Settings as SettingsIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { useSettingsStore } from "../../../store/settingsStore";
 import { useDrawerStore } from "../../../store/drawerStore";
+import { useAuthStore } from "../../../store/authStore";
+import { useUpdateUserSettings } from "../../../hooks/useUpdateUserSettings";
 
 export function SettingsDrawer() {
   const { t } = useTranslation();
@@ -23,6 +30,48 @@ export function SettingsDrawer() {
   const setAutoDimEnabled = useSettingsStore(
     (state) => state.setAutoDimEnabled,
   );
+  const userSettings = useAuthStore((state) => state.userSettings);
+
+  // Track if we've initialized from userSettings
+  const [initialized, setInitialized] = useState(false);
+
+  // Initialize state
+  const [trackingProjectName, setTrackingProjectName] = useState("");
+  const [clockifyApiKey, setClockifyApiKey] = useState("");
+  const [clockifyWorkspaceId, setClockifyWorkspaceId] = useState("");
+
+  // Initialize from userSettings once they're loaded
+  if (userSettings && !initialized) {
+    setTrackingProjectName(userSettings.trackingProjectName || "");
+    setClockifyApiKey(userSettings.clockifyApiKey || "");
+    setClockifyWorkspaceId(userSettings.clockifyWorkspaceId || "");
+    setInitialized(true);
+  }
+
+  const updateProjectMutation = useUpdateUserSettings();
+
+  // Check if settings have changed
+  const hasChanges =
+    trackingProjectName.trim() !== (userSettings?.trackingProjectName || "") ||
+    clockifyApiKey.trim() !== (userSettings?.clockifyApiKey || "") ||
+    clockifyWorkspaceId.trim() !== (userSettings?.clockifyWorkspaceId || "");
+
+  const handleSaveProject = () => {
+    const trimmedProject = trackingProjectName.trim();
+    const trimmedApiKey = clockifyApiKey.trim();
+    const trimmedWorkspaceId = clockifyWorkspaceId.trim();
+
+    if (!trimmedProject || !trimmedApiKey || !trimmedWorkspaceId) {
+      toast.error(t("settings.allFieldsRequired"));
+      return;
+    }
+
+    updateProjectMutation.mutate({
+      tracking_project_name: trimmedProject,
+      clockify_api_key: trimmedApiKey,
+      clockify_workspace_id: trimmedWorkspaceId,
+    });
+  };
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -106,6 +155,73 @@ export function SettingsDrawer() {
             <Typography variant="body2" color="text.secondary">
               {t("settings.brightnessNote")}
             </Typography>
+
+            <Divider sx={{ my: 3 }} />
+
+            {/* Clockify Integration */}
+            <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
+              {t("settings.trackingSettings")}
+            </Typography>
+
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                fullWidth
+                label={t("settings.clockifyApiKey")}
+                type="password"
+                value={clockifyApiKey}
+                onChange={(e) => setClockifyApiKey(e.target.value)}
+                placeholder={t("settings.clockifyApiKeyPlaceholder")}
+                helperText={t("settings.clockifyApiKeyHelp")}
+                disabled={updateProjectMutation.isPending}
+                autoComplete="off"
+              />
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                fullWidth
+                label={t("settings.clockifyWorkspaceId")}
+                value={clockifyWorkspaceId}
+                onChange={(e) => setClockifyWorkspaceId(e.target.value)}
+                placeholder={t("settings.clockifyWorkspaceIdPlaceholder")}
+                helperText={t("settings.clockifyWorkspaceIdHelp")}
+                disabled={updateProjectMutation.isPending}
+              />
+            </Box>
+
+            <Box sx={{ mb: 2 }}>
+              <TextField
+                fullWidth
+                label={t("settings.clockifyProject")}
+                value={trackingProjectName}
+                onChange={(e) => setTrackingProjectName(e.target.value)}
+                placeholder={t("settings.clockifyProjectPlaceholder")}
+                helperText={t("settings.clockifyProjectHelp")}
+                disabled={updateProjectMutation.isPending}
+              />
+            </Box>
+
+            <Button
+              variant="contained"
+              onClick={handleSaveProject}
+              disabled={
+                updateProjectMutation.isPending ||
+                !trackingProjectName.trim() ||
+                !clockifyApiKey.trim() ||
+                !clockifyWorkspaceId.trim() ||
+                !hasChanges
+              }
+              startIcon={
+                updateProjectMutation.isPending ? (
+                  <CircularProgress size={20} />
+                ) : null
+              }
+              sx={{ textTransform: "none" }}
+            >
+              {updateProjectMutation.isPending
+                ? t("settings.saving")
+                : t("settings.saveProject")}
+            </Button>
           </Box>
         </Box>
       </Drawer>

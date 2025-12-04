@@ -35,6 +35,37 @@ export type Database = {
         };
         Relationships: [];
       };
+      user_settings: {
+        Row: {
+          id: string;
+          user: string;
+          tracking_project_name: string | null;
+          clockify_api_key: string | null;
+          clockify_workspace_id: string | null;
+        };
+        Insert: {
+          id?: string;
+          user: string;
+          tracking_project_name?: string | null;
+          clockify_api_key?: string | null;
+          clockify_workspace_id?: string | null;
+        };
+        Update: {
+          id?: string;
+          user?: string;
+          tracking_project_name?: string | null;
+          clockify_api_key?: string | null;
+          clockify_workspace_id?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_settings_user_fkey";
+            columns: ["user"];
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       presets: {
         Row: {
           id: string;

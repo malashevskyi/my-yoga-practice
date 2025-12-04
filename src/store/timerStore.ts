@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { TimerStep, TimerStatus } from "../types/timer";
-import { useHistoryStore } from "./historyStore";
+import { trackCompletedTimer } from "../utils/trackTimer";
 
 interface TimerStore {
   queue: TimerStep[];
@@ -178,8 +178,8 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
         ? "/gongs/two-gongs.mp3"
         : "/gongs/one-gong.mp3";
 
-      // Add completed timer to history
-      useHistoryStore.getState().addCompletedTimer(currentStep);
+      // Track to Clockify (async, non-blocking)
+      trackCompletedTimer(currentStep);
 
       // ALWAYS play gong first and mark as transitioning
       // Add timestamp to force new gong even if same file

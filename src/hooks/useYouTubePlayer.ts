@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useId } from "react";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface UseYouTubePlayerOptions {
   videoId: string;
@@ -57,6 +58,7 @@ export function useYouTubePlayer({
   const playerRef = useRef<YouTubePlayer | null>(null);
   const containerId = useId();
   const [isReady, setIsReady] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Load YouTube IFrame API
@@ -122,7 +124,7 @@ export function useYouTubePlayer({
           playerRef.current.stopVideo();
         } catch (error) {
           console.error("Error stopping video:", error);
-          toast.error("Error stopping YouTube video.");
+          toast.error(t("errors.youtubeStopError"));
         }
       }
 
@@ -134,13 +136,13 @@ export function useYouTubePlayer({
           playerRef.current.destroy();
         } catch (error) {
           console.error("Error destroying player:", error);
-          toast.error("Error destroying YouTube player.");
+          toast.error(t("errors.youtubeDestroyError"));
         }
       }
 
       playerRef.current = null;
     };
-  }, [videoId, autoplay, onReady, onEnd, containerId]);
+  }, [videoId, autoplay, onReady, onEnd, containerId, t]);
 
   const play = () => {
     playerRef.current?.playVideo();
