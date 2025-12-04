@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/logo.png" alt="My Yoga Practice Logo" width="120" height="120">
+  <img width="192" height="192" alt="android-chrome-192x192" src="https://github.com/user-attachments/assets/15da0e01-5f3e-4ad3-a9aa-641038359a93" />
   
   # My Yoga Practice
   
