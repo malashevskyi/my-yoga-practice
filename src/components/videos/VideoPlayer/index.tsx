@@ -38,7 +38,7 @@ export function VideoPlayer({ videoId, ref }: VideoPlayerProps) {
       sx={{
         position: "relative",
         width: "100%",
-        paddingTop: "56.25%", // 16:9 aspect ratio
+        paddingTop: "55.55%", // 16:9 aspect ratio
         bgcolor: "black",
         display: "flex",
         backgroundColor: "black",
