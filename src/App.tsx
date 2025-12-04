@@ -86,7 +86,7 @@ function App() {
           }}
         >
           <AppDrawerWrapper />
-          <SettingsDrawer />
+          {isAuthenticated && <SettingsDrawer />}
           <LanguageSwitcher />
           {isAuthenticated ? <LogoutButton /> : <LoginButton />}
         </Box>
