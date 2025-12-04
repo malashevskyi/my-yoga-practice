@@ -14,13 +14,84 @@ import {
   Settings as SettingsIcon,
   Close as CloseIcon,
 } from "@mui/icons-material";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
+import { Formik, Form, useField } from "formik";
 import { useSettingsStore } from "../../../store/settingsStore";
 import { useDrawerStore } from "../../../store/drawerStore";
 import { useAuthStore } from "../../../store/authStore";
 import { useUpdateUserSettings } from "../../../hooks/useUpdateUserSettings";
+import {
+  settingsValidationSchema,
+  type SettingsFormValues,
+} from "./settingsValidationSchema";
+
+function ClockifyApiKeyField() {
+  const { t } = useTranslation();
+  const [field, meta] = useField("clockifyApiKey");
+  const updateProjectMutation = useUpdateUserSettings();
+
+  return (
+    <TextField
+      {...field}
+      fullWidth
+      label={t("settings.clockifyApiKey")}
+      type="password"
+      placeholder={t("settings.clockifyApiKeyPlaceholder")}
+      helperText={
+        meta.touched && meta.error
+          ? meta.error
+          : t("settings.clockifyApiKeyHelp")
+      }
+      error={meta.touched && Boolean(meta.error)}
+      disabled={updateProjectMutation.isPending}
+      autoComplete="off"
+    />
+  );
+}
+
+function ClockifyWorkspaceIdField() {
+  const { t } = useTranslation();
+  const [field, meta] = useField("clockifyWorkspaceId");
+  const updateProjectMutation = useUpdateUserSettings();
+
+  return (
+    <TextField
+      {...field}
+      fullWidth
+      label={t("settings.clockifyWorkspaceId")}
+      placeholder={t("settings.clockifyWorkspaceIdPlaceholder")}
+      helperText={
+        meta.touched && meta.error
+          ? meta.error
+          : t("settings.clockifyWorkspaceIdHelp")
+      }
+      error={meta.touched && Boolean(meta.error)}
+      disabled={updateProjectMutation.isPending}
+    />
+  );
+}
+
+function TrackingProjectNameField() {
+  const { t } = useTranslation();
+  const [field, meta] = useField("trackingProjectName");
+  const updateProjectMutation = useUpdateUserSettings();
+
+  return (
+    <TextField
+      {...field}
+      fullWidth
+      label={t("settings.clockifyProject")}
+      placeholder={t("settings.clockifyProjectPlaceholder")}
+      helperText={
+        meta.touched && meta.error
+          ? meta.error
+          : t("settings.clockifyProjectHelp")
+      }
+      error={meta.touched && Boolean(meta.error)}
+      disabled={updateProjectMutation.isPending}
+    />
+  );
+}
 
 export function SettingsDrawer() {
   const { t } = useTranslation();
@@ -31,45 +102,19 @@ export function SettingsDrawer() {
     (state) => state.setAutoDimEnabled,
   );
   const userSettings = useAuthStore((state) => state.userSettings);
-
-  // Track if we've initialized from userSettings
-  const [initialized, setInitialized] = useState(false);
-
-  // Initialize state
-  const [trackingProjectName, setTrackingProjectName] = useState("");
-  const [clockifyApiKey, setClockifyApiKey] = useState("");
-  const [clockifyWorkspaceId, setClockifyWorkspaceId] = useState("");
-
-  // Initialize from userSettings once they're loaded
-  if (userSettings && !initialized) {
-    setTrackingProjectName(userSettings.trackingProjectName || "");
-    setClockifyApiKey(userSettings.clockifyApiKey || "");
-    setClockifyWorkspaceId(userSettings.clockifyWorkspaceId || "");
-    setInitialized(true);
-  }
-
   const updateProjectMutation = useUpdateUserSettings();
 
-  // Check if settings have changed
-  const hasChanges =
-    trackingProjectName.trim() !== (userSettings?.trackingProjectName || "") ||
-    clockifyApiKey.trim() !== (userSettings?.clockifyApiKey || "") ||
-    clockifyWorkspaceId.trim() !== (userSettings?.clockifyWorkspaceId || "");
+  const initialValues: SettingsFormValues = {
+    clockifyApiKey: userSettings?.clockifyApiKey || "",
+    clockifyWorkspaceId: userSettings?.clockifyWorkspaceId || "",
+    trackingProjectName: userSettings?.trackingProjectName || "",
+  };
 
-  const handleSaveProject = () => {
-    const trimmedProject = trackingProjectName.trim();
-    const trimmedApiKey = clockifyApiKey.trim();
-    const trimmedWorkspaceId = clockifyWorkspaceId.trim();
-
-    if (!trimmedProject || !trimmedApiKey || !trimmedWorkspaceId) {
-      toast.error(t("settings.allFieldsRequired"));
-      return;
-    }
-
+  const handleSubmit = (values: SettingsFormValues) => {
     updateProjectMutation.mutate({
-      tracking_project_name: trimmedProject,
-      clockify_api_key: trimmedApiKey,
-      clockify_workspace_id: trimmedWorkspaceId,
+      tracking_project_name: values.trackingProjectName.trim(),
+      clockify_api_key: values.clockifyApiKey.trim(),
+      clockify_workspace_id: values.clockifyWorkspaceId.trim(),
     });
   };
 
@@ -158,70 +203,49 @@ export function SettingsDrawer() {
 
             <Divider sx={{ my: 3 }} />
 
-            {/* Clockify Integration */}
+            {/* Clockify Integration with Formik */}
             <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
               {t("settings.trackingSettings")}
             </Typography>
 
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label={t("settings.clockifyApiKey")}
-                type="password"
-                value={clockifyApiKey}
-                onChange={(e) => setClockifyApiKey(e.target.value)}
-                placeholder={t("settings.clockifyApiKeyPlaceholder")}
-                helperText={t("settings.clockifyApiKeyHelp")}
-                disabled={updateProjectMutation.isPending}
-                autoComplete="off"
-              />
-            </Box>
-
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label={t("settings.clockifyWorkspaceId")}
-                value={clockifyWorkspaceId}
-                onChange={(e) => setClockifyWorkspaceId(e.target.value)}
-                placeholder={t("settings.clockifyWorkspaceIdPlaceholder")}
-                helperText={t("settings.clockifyWorkspaceIdHelp")}
-                disabled={updateProjectMutation.isPending}
-              />
-            </Box>
-
-            <Box sx={{ mb: 2 }}>
-              <TextField
-                fullWidth
-                label={t("settings.clockifyProject")}
-                value={trackingProjectName}
-                onChange={(e) => setTrackingProjectName(e.target.value)}
-                placeholder={t("settings.clockifyProjectPlaceholder")}
-                helperText={t("settings.clockifyProjectHelp")}
-                disabled={updateProjectMutation.isPending}
-              />
-            </Box>
-
-            <Button
-              variant="contained"
-              onClick={handleSaveProject}
-              disabled={
-                updateProjectMutation.isPending ||
-                !trackingProjectName.trim() ||
-                !clockifyApiKey.trim() ||
-                !clockifyWorkspaceId.trim() ||
-                !hasChanges
-              }
-              startIcon={
-                updateProjectMutation.isPending ? (
-                  <CircularProgress size={20} />
-                ) : null
-              }
-              sx={{ textTransform: "none" }}
+            <Formik
+              initialValues={initialValues}
+              validationSchema={settingsValidationSchema}
+              validateOnChange={true}
+              validateOnBlur={true}
+              onSubmit={handleSubmit}
+              enableReinitialize
             >
-              {updateProjectMutation.isPending
-                ? t("settings.saving")
-                : t("settings.saveProject")}
-            </Button>
+              {({ isSubmitting, isValid, dirty }) => (
+                <Form>
+                  <Box sx={{ mb: 2 }}>
+                    <ClockifyApiKeyField />
+                  </Box>
+
+                  <Box sx={{ mb: 2 }}>
+                    <ClockifyWorkspaceIdField />
+                  </Box>
+
+                  <Box sx={{ mb: 2 }}>
+                    <TrackingProjectNameField />
+                  </Box>
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={isSubmitting || !isValid || !dirty}
+                    startIcon={
+                      isSubmitting ? <CircularProgress size={20} /> : null
+                    }
+                    sx={{ textTransform: "none" }}
+                  >
+                    {isSubmitting
+                      ? t("settings.saving")
+                      : t("settings.saveProject")}
+                  </Button>
+                </Form>
+              )}
+            </Formik>
           </Box>
         </Box>
       </Drawer>

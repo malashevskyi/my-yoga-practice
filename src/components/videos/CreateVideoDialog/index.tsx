@@ -11,39 +11,49 @@ import {
   Alert,
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
-import { Formik, Form, Field, type FormikHelpers } from "formik";
+import { Formik, Form, useField, type FormikHelpers } from "formik";
 import { useTranslation } from "react-i18next";
 import { useCreateVideo } from "../../../hooks/useCreateVideo";
+import {
+  videoValidationSchema,
+  type VideoFormValues,
+} from "./videoValidationSchema";
 
 interface CreateVideoDialogProps {
   open: boolean;
   onClose: () => void;
 }
 
-interface VideoFormValues {
-  title: string;
-  url: string;
+function VideoTitleField() {
+  const { t } = useTranslation();
+  const [field, meta] = useField("title");
+
+  return (
+    <TextField
+      {...field}
+      label={t("createVideo.titleLabel")}
+      fullWidth
+      error={meta.touched && Boolean(meta.error)}
+      helperText={meta.touched && meta.error}
+    />
+  );
 }
 
-const validateVideoForm = (values: VideoFormValues) => {
-  const errors: Partial<VideoFormValues> = {};
+function VideoUrlField() {
+  const { t } = useTranslation();
+  const [field, meta] = useField("url");
 
-  if (!values.title.trim()) {
-    errors.title = "Title is required";
-  }
-
-  if (!values.url.trim()) {
-    errors.url = "YouTube URL is required";
-  } else {
-    // Validate YouTube URL
-    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+$/;
-    if (!youtubeRegex.test(values.url)) {
-      errors.url = "Please enter a valid YouTube URL";
-    }
-  }
-
-  return errors;
-};
+  return (
+    <TextField
+      {...field}
+      label={t("createVideo.urlLabel")}
+      fullWidth
+      placeholder={t("createVideo.urlPlaceholder")}
+      error={meta.touched && Boolean(meta.error)}
+      helperText={meta.touched && meta.error}
+    />
+  );
+}
 
 export function CreateVideoDialog({ open, onClose }: CreateVideoDialogProps) {
   const { t } = useTranslation();
@@ -79,11 +89,13 @@ export function CreateVideoDialog({ open, onClose }: CreateVideoDialogProps) {
   return (
     <Formik
       initialValues={initialValues}
-      validate={validateVideoForm}
+      validationSchema={videoValidationSchema}
+      validateOnChange={true}
+      validateOnBlur={true}
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      {({ errors, touched, isSubmitting }) => (
+      {({ isSubmitting, isValid }) => (
         <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
           <Form>
             <DialogTitle>
@@ -107,26 +119,8 @@ export function CreateVideoDialog({ open, onClose }: CreateVideoDialogProps) {
               )}
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                <Field
-                  as={TextField}
-                  name="title"
-                  label={t("createVideo.titleLabel")}
-                  fullWidth
-                  required
-                  error={touched.title && Boolean(errors.title)}
-                  helperText={touched.title && errors.title}
-                />
-
-                <Field
-                  as={TextField}
-                  name="url"
-                  label={t("createVideo.urlLabel")}
-                  fullWidth
-                  required
-                  placeholder={t("createVideo.urlPlaceholder")}
-                  error={touched.url && Boolean(errors.url)}
-                  helperText={touched.url && errors.url}
-                />
+                <VideoTitleField />
+                <VideoUrlField />
               </Box>
             </DialogContent>
 
@@ -137,7 +131,7 @@ export function CreateVideoDialog({ open, onClose }: CreateVideoDialogProps) {
               <Button
                 type="submit"
                 variant="contained"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isValid}
                 sx={{ textTransform: "none" }}
               >
                 {isSubmitting
