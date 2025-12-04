@@ -5,6 +5,7 @@ import {
   SUPABASE_URL,
   SUPABASE_SERVICE_ROLE_KEY,
 } from "../lib/supabase";
+import { serializeError } from "serialize-error";
 
 interface User {
   id: string;
@@ -60,7 +61,7 @@ export const createOrUpdateUser = onCall(
         return { user: data };
       }
     } catch (error) {
-      logger.error("Error creating/updating user:", error);
+      logger.error("Error creating/updating user:", serializeError(error));
       throw new HttpsError("internal", "Failed to create/update user");
     }
   },
