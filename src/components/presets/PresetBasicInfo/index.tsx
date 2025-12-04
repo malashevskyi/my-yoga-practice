@@ -4,8 +4,8 @@ import { useTranslation } from "react-i18next";
 
 export function PresetBasicInfo() {
   const { t } = useTranslation();
-  const [nameField] = useField("name");
-  const [descriptionField] = useField("description");
+  const [nameField, nameMeta] = useField("name");
+  const [descriptionField, descriptionMeta] = useField("description");
 
   return (
     <>
@@ -13,10 +13,11 @@ export function PresetBasicInfo() {
         id="preset-name"
         label={t("createPreset.name")}
         fullWidth
-        autoComplete="false"
+        autoComplete="off"
         {...nameField}
+        error={nameMeta.touched && Boolean(nameMeta.error)}
+        helperText={nameMeta.touched && nameMeta.error}
         sx={{ mb: 2 }}
-        required
       />
 
       <TextField
@@ -26,6 +27,8 @@ export function PresetBasicInfo() {
         multiline
         rows={2}
         {...descriptionField}
+        error={descriptionMeta.touched && Boolean(descriptionMeta.error)}
+        helperText={descriptionMeta.touched && descriptionMeta.error}
         sx={{ mb: 3 }}
       />
     </>

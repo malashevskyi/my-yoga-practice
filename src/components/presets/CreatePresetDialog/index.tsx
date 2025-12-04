@@ -14,12 +14,9 @@ import { Formik, Form } from "formik";
 import { useTranslation } from "react-i18next";
 import { PresetBasicInfo } from "../PresetBasicInfo";
 import { PresetStepsList } from "../PresetStepsList";
-import {
-  createDefaultStep,
-  validatePresetForm,
-  type PresetFormValues,
-} from "./utils";
+import { createDefaultStep, type PresetFormValues } from "./utils";
 import { useCreatePreset } from "../../../hooks/useCreatePreset";
+import { presetValidationSchema } from "./presetValidationSchema";
 
 interface CreatePresetDialogProps {
   open: boolean;
@@ -54,11 +51,13 @@ export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
   return (
     <Formik
       initialValues={initialValues}
-      validate={validatePresetForm}
+      validationSchema={presetValidationSchema}
       onSubmit={handleSubmit}
+      validateOnChange={true}
+      validateOnBlur={true}
       enableReinitialize
     >
-      {({ values, setFieldValue, errors, isSubmitting }) => (
+      {({ values, setFieldValue, isSubmitting, isValid }) => (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
           <Form>
             <DialogTitle>
@@ -78,16 +77,6 @@ export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
               {mutation.error && (
                 <Alert severity="error" sx={{ mb: 2 }}>
                   {mutation.error.message}
-                </Alert>
-              )}
-              {errors.name && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                  {errors.name}
-                </Alert>
-              )}
-              {errors.steps && typeof errors.steps === "string" && (
-                <Alert severity="error" sx={{ mb: 2 }}>
-                  {errors.steps}
                 </Alert>
               )}
 
@@ -119,6 +108,19 @@ export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
                   }
                   setFieldValue("steps", newSteps);
                 }}
+                onLoopSteps={(count) => {
+                  // Duplicate all current steps 'count' times
+                  const loopedSteps: typeof values.steps = [];
+                  for (let i = 0; i < count; i++) {
+                    values.steps.forEach((step) => {
+                      loopedSteps.push({
+                        ...step,
+                        id: crypto.randomUUID(),
+                      });
+                    });
+                  }
+                  setFieldValue("steps", loopedSteps);
+                }}
               />
             </DialogContent>
 
@@ -126,7 +128,11 @@ export function CreatePresetDialog({ open, onClose }: CreatePresetDialogProps) {
               <Button onClick={onClose} disabled={isSubmitting}>
                 {t("createPreset.cancel")}
               </Button>
-              <Button type="submit" variant="contained" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                variant="contained"
+                disabled={isSubmitting || !isValid}
+              >
                 {isSubmitting
                   ? t("createPreset.creating")
                   : t("createPreset.create")}

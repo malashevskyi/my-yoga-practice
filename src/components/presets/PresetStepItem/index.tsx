@@ -1,16 +1,9 @@
-import {
-  Box,
-  TextField,
-  IconButton,
-  Typography,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-} from "@mui/material";
+import { Box, TextField, IconButton, Typography } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import type { TimerStep, TimerType } from "../../../types/timer";
+import { useFormikContext } from "formik";
+import type { TimerStep } from "../../../types/timer";
+import type { PresetFormValues } from "../CreatePresetDialog/utils";
 
 interface PresetStepItemProps {
   step: TimerStep;
@@ -28,6 +21,16 @@ export function PresetStepItem({
   onChange,
 }: PresetStepItemProps) {
   const { t } = useTranslation();
+  const { errors, touched } = useFormikContext<PresetFormValues>();
+
+  // Get errors for this specific step
+  const stepErrors = errors.steps?.[index] as
+    | { label?: string; duration?: string }
+    | undefined;
+  const stepTouched = touched.steps?.[index] as
+    | { label?: boolean; duration?: boolean }
+    | undefined;
+
   return (
     <Box
       sx={{
@@ -48,55 +51,23 @@ export function PresetStepItem({
         {index + 1}.
       </Typography>
 
-      <FormControl sx={{ minWidth: 120 }}>
-        <InputLabel htmlFor={`step-${index}-type`}>
-          {t("presetSteps.type")}
-        </InputLabel>
-        <Select
-          id={`step-${index}-type`}
-          name={`step-${index}-type`}
-          value={step.type}
-          label={t("presetSteps.type")}
-          onChange={(e) => onChange(index, "type", e.target.value as TimerType)}
-          sx={{
-            "& .MuiSelect-nativeInput": {
-              display: "none !important",
-            },
-          }}
-          inputProps={{
-            id: `step-${index}-type`,
-            name: `step-${index}-type`,
-          }}
-        >
-          <MenuItem value="timer">{t("timerTypes.timer")}</MenuItem>
-          <MenuItem value="break">{t("timerTypes.break")}</MenuItem>
-          <MenuItem value="video">{t("timerTypes.video")}</MenuItem>
-        </Select>
-      </FormControl>
-
       <TextField
         id={`step-${index}-label`}
-        name={`step-${index}-label`}
+        name={`steps[${index}].label`}
         label={t("presetSteps.label")}
         fullWidth
         value={step.label}
         onChange={(e) => onChange(index, "label", e.target.value)}
-        required
+        error={stepTouched?.label && Boolean(stepErrors?.label)}
+        helperText={stepTouched?.label && stepErrors?.label}
       />
 
       <TextField
         id={`step-${index}-duration`}
-        name={`step-${index}-duration`}
+        name={`steps[${index}].duration`}
         label={t("presetSteps.duration")}
         type="number"
-        sx={{
-          width: 140,
-
-          "& .MuiOutlinedInput-notchedOutline legend span": {
-            visibility: "hidden",
-            maxWidth: 0,
-          },
-        }}
+        sx={{ width: 200 }}
         defaultValue={Math.round(step.duration / 60)}
         onBlur={(e) => {
           const value = e.target.value;
@@ -112,7 +83,8 @@ export function PresetStepItem({
             e.currentTarget.blur();
           }
         }}
-        required
+        error={stepTouched?.duration && Boolean(stepErrors?.duration)}
+        helperText={stepTouched?.duration && stepErrors?.duration}
       />
 
       <IconButton
