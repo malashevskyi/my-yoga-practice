@@ -14,3 +14,10 @@ body {
   min-height: 100vh;
   width: 100%;
 }
+
+/* Hide the duplicated label text rendered inside <legend> by MUI's outlined TextField.
+   MUI renders the label twice: once as a <label> and once inside <legend> for the notched outline effect.
+   We keep the notch animation behavior but visually hide the text to avoid overlapping labels. */
+.MuiOutlinedInput-notchedOutline legend span {
+  visibility: hidden;
+}
