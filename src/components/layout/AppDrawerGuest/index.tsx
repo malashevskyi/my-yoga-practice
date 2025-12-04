@@ -9,7 +9,6 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
-import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useDrawerStore } from "../../../store/drawerStore";
 import { useTimerStore } from "../../../store/timerStore";
@@ -24,13 +23,6 @@ export function AppDrawerGuest() {
   const setIsOpen = useDrawerStore((state) => state.setAppDrawerOpen);
   const setQueue = useTimerStore((state) => state.setQueue);
   const queue = useTimerStore((state) => state.queue);
-
-  // Auto-select first preset if no preset is selected
-  useEffect(() => {
-    if (queue.length === 0 && DEFAULT_PRESETS.length > 0) {
-      setQueue(DEFAULT_PRESETS[0].steps);
-    }
-  }, [queue.length, setQueue]);
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);

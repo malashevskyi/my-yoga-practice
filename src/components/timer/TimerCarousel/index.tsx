@@ -6,6 +6,7 @@ import { useTimerStore } from "../../../store/timerStore";
 import { formatTime } from "../../../utils/formatTime";
 import { VerticalScrollWrapper } from "../../shared/VerticalScrollWrapper";
 import { getFontSize, getTimerSpacing } from "./utils/getForntSize";
+import { EmptyTimerState } from "../EmptyTimerState";
 
 export function TimerCarousel() {
   const queue = useTimerStore((state) => state.queue);
@@ -78,21 +79,7 @@ export function TimerCarousel() {
   };
 
   if (queue.length === 0) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexGrow: 1,
-          py: 4,
-        }}
-      >
-        <Typography variant="h5" color="text.secondary">
-          No timers loaded. Load a preset to begin.
-        </Typography>
-      </Box>
-    );
+    return <EmptyTimerState />;
   }
 
   return (
