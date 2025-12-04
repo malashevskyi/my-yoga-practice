@@ -5,6 +5,7 @@ import {
   Pause,
   Refresh,
   SkipNext,
+  SkipPrevious,
   Clear,
   Brightness6,
 } from "@mui/icons-material";
@@ -15,11 +16,13 @@ import { MAX_BRIGHTNESS, MIN_BRIGHTNESS } from "../../../common/constants";
 export function TimerControls() {
   const status = useTimerStore((state) => state.status);
   const queue = useTimerStore((state) => state.queue);
+  const activeTimerIndex = useTimerStore((state) => state.activeTimerIndex);
   const start = useTimerStore((state) => state.start);
   const pause = useTimerStore((state) => state.pause);
   const resetCurrent = useTimerStore((state) => state.resetCurrent);
   const clearAll = useTimerStore((state) => state.clearAll);
   const skipNext = useTimerStore((state) => state.skipNext);
+  const skipPrevious = useTimerStore((state) => state.skipPrevious);
   const { height } = useWindowSize();
 
   const brightness = useBrightnessStore((state) => state.brightness);
@@ -33,6 +36,8 @@ export function TimerControls() {
   const canPlayPause = hasTimers && !isCompleted;
   // Reset and skip available when has timers
   const canResetSkip = hasTimers;
+  // Previous button available when not at first timer (or when looping and has timers)
+  const canSkipPrevious = hasTimers && activeTimerIndex > 0;
 
   const handleBrightnessChange = (
     _event: Event,
@@ -60,6 +65,26 @@ export function TimerControls() {
           gap: 2,
         }}
       >
+        {/* Previous */}
+        <IconButton
+          onClick={skipPrevious}
+          disabled={!canSkipPrevious}
+          size="large"
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: "action.hover",
+            "&:hover": {
+              bgcolor: "action.selected",
+            },
+            "&:disabled": {
+              bgcolor: "action.disabledBackground",
+            },
+          }}
+        >
+          <SkipPrevious sx={{ fontSize: 32 }} />
+        </IconButton>
+
         {/* Play/Pause */}
         <IconButton
           onClick={isRunning ? pause : start}
@@ -85,6 +110,26 @@ export function TimerControls() {
           )}
         </IconButton>
 
+        {/* Skip Next */}
+        <IconButton
+          onClick={skipNext}
+          disabled={!canResetSkip}
+          size="large"
+          sx={{
+            width: 56,
+            height: 56,
+            bgcolor: "action.hover",
+            "&:hover": {
+              bgcolor: "action.selected",
+            },
+            "&:disabled": {
+              bgcolor: "action.disabledBackground",
+            },
+          }}
+        >
+          <SkipNext sx={{ fontSize: 32 }} />
+        </IconButton>
+
         {/* Reset */}
         <IconButton
           onClick={resetCurrent}
@@ -103,26 +148,6 @@ export function TimerControls() {
           }}
         >
           <Refresh sx={{ fontSize: 32 }} />
-        </IconButton>
-
-        {/* Skip */}
-        <IconButton
-          onClick={skipNext}
-          disabled={!canResetSkip}
-          size="large"
-          sx={{
-            width: 56,
-            height: 56,
-            bgcolor: "action.hover",
-            "&:hover": {
-              bgcolor: "action.selected",
-            },
-            "&:disabled": {
-              bgcolor: "action.disabledBackground",
-            },
-          }}
-        >
-          <SkipNext sx={{ fontSize: 32 }} />
         </IconButton>
 
         {/* Clear All */}

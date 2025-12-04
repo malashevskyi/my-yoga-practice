@@ -21,6 +21,7 @@ interface TimerStore {
   resetCurrent: () => void;
   clearAll: () => void; // Clear all timers and reset to initial state
   skipNext: () => void;
+  skipPrevious: () => void; // Go to previous timer
   updateTime: () => void; // Renamed from tick - updates based on real time
   setIsLooping: (value: boolean) => void;
   clearGong: () => void;
@@ -133,6 +134,34 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
           pausedTime: 0,
         });
       }
+    }
+  },
+
+  skipPrevious: () => {
+    const { queue, activeTimerIndex, isLooping } = get();
+    const prevIndex = activeTimerIndex - 1;
+
+    if (prevIndex >= 0) {
+      // Move to previous step
+      set({
+        activeTimerIndex: prevIndex,
+        timeLeft: queue[prevIndex].duration,
+        totalProgress: 0,
+        startTime: Date.now(),
+        pausedTime: 0,
+        // status: "running", // Auto-start when going back
+      });
+    } else if (isLooping && queue.length > 0) {
+      // If at first timer and looping, go to last timer
+      const lastIndex = queue.length - 1;
+      set({
+        activeTimerIndex: lastIndex,
+        timeLeft: queue[lastIndex].duration,
+        totalProgress: 0,
+        startTime: Date.now(),
+        pausedTime: 0,
+        status: "running",
+      });
     }
   },
 
