@@ -5,6 +5,7 @@ import { useYouTubePlayer } from "../../../hooks/useYouTubePlayer";
 interface VideoPlayerProps {
   videoId: string;
   ref?: React.Ref<VideoPlayerRef>;
+  onStateChange?: (state: number) => void;
 }
 
 export interface VideoPlayerRef {
@@ -15,11 +16,12 @@ export interface VideoPlayerRef {
   togglePlayPause: () => void;
 }
 
-export function VideoPlayer({ videoId, ref }: VideoPlayerProps) {
+export function VideoPlayer({ videoId, ref, onStateChange }: VideoPlayerProps) {
   const { containerId, stop, play, pause, restart, togglePlayPause } =
     useYouTubePlayer({
       videoId,
       autoplay: true,
+      onStateChange,
     });
 
   useImperativeHandle(ref, () => ({

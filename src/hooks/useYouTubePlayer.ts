@@ -7,6 +7,7 @@ interface UseYouTubePlayerOptions {
   autoplay?: boolean;
   onReady?: () => void;
   onEnd?: () => void;
+  onStateChange?: (state: number) => void; // YouTube player state: 1=PLAYING, 2=PAUSED, etc.
 }
 
 interface YouTubePlayer {
@@ -54,6 +55,7 @@ export function useYouTubePlayer({
   autoplay = true,
   onReady,
   onEnd,
+  onStateChange,
 }: UseYouTubePlayerOptions) {
   const playerRef = useRef<YouTubePlayer | null>(null);
   const containerId = useId();
@@ -100,6 +102,9 @@ export function useYouTubePlayer({
             }
           },
           onStateChange: (event) => {
+            // Notify parent about state changes
+            onStateChange?.(event.data);
+
             // Video ended
             if (event.data === window.YT.PlayerState.ENDED) {
               onEnd?.();
@@ -142,27 +147,47 @@ export function useYouTubePlayer({
 
       playerRef.current = null;
     };
-  }, [videoId, autoplay, onReady, onEnd, containerId, t]);
+  }, [videoId, autoplay, onReady, onEnd, onStateChange, containerId, t]);
 
   const play = () => {
-    playerRef.current?.playVideo();
+    if (
+      playerRef.current &&
+      typeof playerRef.current.playVideo === "function"
+    ) {
+      playerRef.current.playVideo();
+    }
   };
 
   const pause = () => {
-    playerRef.current?.pauseVideo();
+    if (
+      playerRef.current &&
+      typeof playerRef.current.pauseVideo === "function"
+    ) {
+      playerRef.current.pauseVideo();
+    }
   };
 
   const stop = () => {
-    playerRef.current?.stopVideo();
+    if (
+      playerRef.current &&
+      typeof playerRef.current.stopVideo === "function"
+    ) {
+      playerRef.current.stopVideo();
+    }
   };
 
   const restart = () => {
-    playerRef.current?.seekTo(0, true);
-    playerRef.current?.playVideo();
+    if (playerRef.current && typeof playerRef.current.seekTo === "function") {
+      playerRef.current.seekTo(0, true);
+      playerRef.current.playVideo();
+    }
   };
 
   const togglePlayPause = () => {
-    if (playerRef.current) {
+    if (
+      playerRef.current &&
+      typeof playerRef.current.getPlayerState === "function"
+    ) {
       const state = playerRef.current.getPlayerState();
       // 1 = PLAYING, 2 = PAUSED
       if (state === 1) {
