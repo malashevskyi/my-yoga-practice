@@ -1,19 +1,7 @@
-import {
-  Drawer,
-  IconButton,
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
+import { Drawer, IconButton, Box, Typography } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { useDrawerStore } from "../../../store/drawerStore";
-import { useTimerStore } from "../../../store/timerStore";
-import { DEFAULT_PRESETS } from "../../../data/defaultPresets";
-import { formatTime } from "../../../utils/formatTime";
 import { LoginButton } from "../../core/LoginButton";
 
 export function AppDrawerGuest() {
@@ -21,25 +9,9 @@ export function AppDrawerGuest() {
 
   const isOpen = useDrawerStore((state) => state.isAppDrawerOpen);
   const setIsOpen = useDrawerStore((state) => state.setAppDrawerOpen);
-  const setQueue = useTimerStore((state) => state.setQueue);
-  const queue = useTimerStore((state) => state.queue);
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
-  };
-
-  const handleSelectPreset = (
-    presetSteps: (typeof DEFAULT_PRESETS)[0]["steps"],
-  ) => {
-    setQueue(presetSteps);
-  };
-
-  // Check if current queue matches a preset
-  const isPresetActive = (
-    presetSteps: (typeof DEFAULT_PRESETS)[0]["steps"],
-  ) => {
-    if (queue.length !== presetSteps.length) return false;
-    return queue.every((step, index) => step.id === presetSteps[index].id);
   };
 
   return (
@@ -80,67 +52,20 @@ export function AppDrawerGuest() {
               borderColor: "divider",
             }}
           >
-            <Typography variant="h6">{t("menu.presets")}</Typography>
+            <Typography variant="h6">{t("menu.title")}</Typography>
             <IconButton onClick={toggleDrawer}>
               <CloseIcon />
             </IconButton>
-          </Box>
-
-          {/* Presets List */}
-          <Box sx={{ p: 3, flexGrow: 1, overflowY: "auto" }}>
-            <List>
-              {DEFAULT_PRESETS.map((preset) => (
-                <ListItem key={preset.id} disablePadding>
-                  <ListItemButton
-                    onClick={() => handleSelectPreset(preset.steps)}
-                    selected={isPresetActive(preset.steps)}
-                    sx={{
-                      borderRadius: 1,
-                      mb: 0.5,
-                    }}
-                  >
-                    <ListItemText
-                      primary={t(`defaultPresets.${preset.name}`)}
-                      secondary={
-                        <>
-                          {preset.description && (
-                            <Typography
-                              component="span"
-                              variant="body2"
-                              color="text.secondary"
-                            >
-                              {preset.description}
-                              <br />
-                            </Typography>
-                          )}
-                          <Typography
-                            component="span"
-                            variant="caption"
-                            color="text.secondary"
-                          >
-                            {preset.steps.length} {t("presets.steps")} •{" "}
-                            {t("presets.total")}:{" "}
-                            {formatTime(preset.duration_total)}
-                          </Typography>
-                        </>
-                      }
-                      primaryTypographyProps={{
-                        fontWeight: 600,
-                      }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
           </Box>
 
           {/* Login Prompt */}
           <Box
             sx={{
               p: 3,
-              borderTop: 1,
-              borderColor: "divider",
-              bgcolor: "background.paper",
+              flexGrow: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
             }}
           >
             <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 1 }}>

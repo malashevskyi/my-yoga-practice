@@ -3,7 +3,6 @@ import { Drawer, IconButton, Box, Tabs, Tab, Typography } from "@mui/material";
 import { Menu as MenuIcon, Close as CloseIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { HistoryList } from "../../history/HistoryList";
-import { PresetsList } from "../../presets/PresetsList";
 import { VideosList } from "../../videos/VideosList";
 import { useDrawerStore } from "../../../store/drawerStore";
 import { useAuthStore } from "../../../store/authStore";
@@ -82,25 +81,19 @@ export function AppDrawer() {
           {/* Tabs */}
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs value={tabValue} onChange={handleTabChange} centered>
-              <Tab label={t("menu.presets")} />
               <Tab label={t("menu.videos")} />
               <Tab label={t("menu.history")} />
             </Tabs>
           </Box>
           {user && (
             <>
-              {/* Presets Tab */}
-              <TabPanel value={tabValue} index={0}>
-                <PresetsList />
-              </TabPanel>
-
               {/* Videos Tab */}
-              <TabPanel value={tabValue} index={1}>
+              <TabPanel value={tabValue} index={0}>
                 <VideosList />
               </TabPanel>
 
               {/* History Tab */}
-              <TabPanel value={tabValue} index={2}>
+              <TabPanel value={tabValue} index={1}>
                 <HistoryList />
               </TabPanel>
             </>
