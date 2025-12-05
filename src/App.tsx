@@ -1,4 +1,4 @@
-import { Box, GlobalStyles } from "@mui/material";
+import { Box, GlobalStyles, useMediaQuery, useTheme } from "@mui/material";
 import { LanguageSwitcher } from "./components/core/LanguageSwitcher";
 import { LoginButton } from "./components/core/LoginButton";
 import { LogoutButton } from "./components/core/LogoutButton";
@@ -19,6 +19,7 @@ import { useBrightnessStore } from "./store/brightnessStore";
 import { useAuthStore } from "./store/authStore";
 import { useMuiGhostFix } from "./hooks/useMuiGhostFix";
 import { Toaster } from "sonner";
+import { BackgroundParticles } from "./components/layout/BackgroundParticles";
 
 function App() {
   // Initialize authentication state
@@ -34,7 +35,8 @@ function App() {
   useUserActivity();
 
   useMuiGhostFix('textarea[aria-hidden="true"].MuiInputBase-inputMultiline');
-
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const gongToPlay = useTimerStore((state) => state.gongToPlay);
   const brightness = useBrightnessStore((state) => state.brightness);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -69,6 +71,8 @@ function App() {
       >
         {/* Global Progress Bar */}
         <GlobalProgress />
+
+        {!isMobile && <BackgroundParticles variant="snow" />}
 
         {/* Language & Auth Controls (Top Right) */}
         <Box
