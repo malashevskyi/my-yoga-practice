@@ -78,6 +78,7 @@ function App() {
             right: 16,
             zIndex: 1000,
             display: "flex",
+            alignItems: "center",
             flexDirection: {
               xs: "column-reverse",
               md: "row",
