@@ -17,16 +17,7 @@ export function AppDrawerGuest() {
   return (
     <>
       {/* Menu Button */}
-      <IconButton
-        onClick={toggleDrawer}
-        size="large"
-        sx={{
-          bgcolor: "action.hover",
-          "&:hover": {
-            bgcolor: "action.selected",
-          },
-        }}
-      >
+      <IconButton onClick={toggleDrawer} size="large">
         <MenuIcon />
       </IconButton>
 

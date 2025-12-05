@@ -32,16 +32,7 @@ export function LoginButton({
   // Mobile: Show icon button
   if (isMobile) {
     return (
-      <IconButton
-        onClick={handleLogin}
-        size="large"
-        sx={{
-          bgcolor: "action.hover",
-          "&:hover": {
-            bgcolor: "action.selected",
-          },
-        }}
-      >
+      <IconButton onClick={handleLogin} size="large">
         <LoginIcon />
       </IconButton>
     );

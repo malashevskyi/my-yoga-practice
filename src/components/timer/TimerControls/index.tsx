@@ -73,10 +73,6 @@ export function TimerControls() {
           sx={{
             width: 56,
             height: 56,
-            bgcolor: "action.hover",
-            "&:hover": {
-              bgcolor: "action.selected",
-            },
             "&:disabled": {
               bgcolor: "action.disabledBackground",
             },
@@ -118,10 +114,6 @@ export function TimerControls() {
           sx={{
             width: 56,
             height: 56,
-            bgcolor: "action.hover",
-            "&:hover": {
-              bgcolor: "action.selected",
-            },
             "&:disabled": {
               bgcolor: "action.disabledBackground",
             },
@@ -138,10 +130,6 @@ export function TimerControls() {
           sx={{
             width: 56,
             height: 56,
-            bgcolor: "action.hover",
-            "&:hover": {
-              bgcolor: "action.selected",
-            },
             "&:disabled": {
               bgcolor: "action.disabledBackground",
             },
@@ -158,7 +146,6 @@ export function TimerControls() {
           sx={{
             width: 56,
             height: 56,
-            bgcolor: "action.hover",
             color: "error.main",
             "&:hover": {
               bgcolor: "error.light",

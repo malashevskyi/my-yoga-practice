@@ -36,16 +36,7 @@ export function LogoutButton({
   // Mobile: Show icon button
   if (isMobile) {
     return (
-      <IconButton
-        onClick={handleLogout}
-        size="large"
-        sx={{
-          bgcolor: "action.hover",
-          "&:hover": {
-            bgcolor: "action.selected",
-          },
-        }}
-      >
+      <IconButton onClick={handleLogout} size="large">
         <LogoutIcon />
       </IconButton>
     );
