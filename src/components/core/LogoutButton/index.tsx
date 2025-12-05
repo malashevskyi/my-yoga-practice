@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { Button, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Logout as LogoutIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { signOut } from "firebase/auth";
 import { auth } from "../../../lib/firebase";
@@ -17,6 +18,8 @@ export function LogoutButton({
   size = "medium",
 }: LogoutButtonProps) {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const logout = useAuthStore((state) => state.logout);
 
   const handleLogout = async () => {
@@ -30,6 +33,25 @@ export function LogoutButton({
     }
   };
 
+  // Mobile: Show icon button
+  if (isMobile) {
+    return (
+      <IconButton
+        onClick={handleLogout}
+        size="large"
+        sx={{
+          bgcolor: "action.hover",
+          "&:hover": {
+            bgcolor: "action.selected",
+          },
+        }}
+      >
+        <LogoutIcon />
+      </IconButton>
+    );
+  }
+
+  // Desktop/Tablet: Show text button
   return (
     <Button
       variant={variant}

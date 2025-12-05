@@ -1,4 +1,5 @@
-import { Button } from "@mui/material";
+import { Button, IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { Login as LoginIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../../lib/firebase";
@@ -16,6 +17,8 @@ export function LoginButton({
   size = "medium",
 }: LoginButtonProps) {
   const { t } = useTranslation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleLogin = async () => {
     try {
@@ -26,6 +29,25 @@ export function LoginButton({
     }
   };
 
+  // Mobile: Show icon button
+  if (isMobile) {
+    return (
+      <IconButton
+        onClick={handleLogin}
+        size="large"
+        sx={{
+          bgcolor: "action.hover",
+          "&:hover": {
+            bgcolor: "action.selected",
+          },
+        }}
+      >
+        <LoginIcon />
+      </IconButton>
+    );
+  }
+
+  // Desktop/Tablet: Show text button
   return (
     <Button
       variant={variant}
