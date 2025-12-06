@@ -139,9 +139,9 @@ export function SettingsDrawer() {
           sx={{
             maxWidth: 400,
             width: "100vw",
-            height: "100%",
-            display: "flex",
-            flexDirection: "column",
+            height: "100vh",
+            display: "grid",
+            gridTemplateRows: "auto 1fr",
           }}
         >
           {/* Header */}
@@ -162,7 +162,7 @@ export function SettingsDrawer() {
           </Box>
 
           {/* Settings Content */}
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ p: 3, overflowY: "auto" }}>
             <Typography variant="subtitle1" fontWeight={600} sx={{ mb: 2 }}>
               {t("settings.displaySettings")}
             </Typography>

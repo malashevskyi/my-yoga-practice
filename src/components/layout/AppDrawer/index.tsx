@@ -51,7 +51,15 @@ export function AppDrawer() {
 
       {/* Drawer */}
       <Drawer anchor="right" open={isOpen} onClose={toggleDrawer}>
-        <Box sx={{ maxWidth: 400, width: "100vw", height: "100%" }}>
+        <Box
+          sx={{
+            maxWidth: 400,
+            width: "100vw",
+            display: "grid",
+            gridTemplateRows: "auto auto 1fr",
+            height: "100vh",
+          }}
+        >
           {/* Header */}
           <Box
             sx={{
@@ -77,7 +85,7 @@ export function AppDrawer() {
             </Tabs>
           </Box>
           {user && (
-            <>
+            <Box sx={{ overflowY: "auto" }}>
               {/* Videos Tab */}
               <TabPanel value={tabValue} index={0}>
                 <VideosList />
@@ -87,7 +95,7 @@ export function AppDrawer() {
               <TabPanel value={tabValue} index={1}>
                 <HistoryList />
               </TabPanel>
-            </>
+            </Box>
           )}
         </Box>
       </Drawer>
