@@ -43,9 +43,8 @@ export function UserPresetListItem({
 
   return (
     <ListItem
-      disablePadding
       secondaryAction={
-        <Box sx={{ display: "flex", gap: 0.5 }}>
+        <Box sx={{ display: "flex", gap: 3 }}>
           <IconButton
             edge="end"
             aria-label="favorite"
