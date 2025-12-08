@@ -81,11 +81,7 @@ export function HistoryList() {
         <Typography variant="body2" color="text.secondary" gutterBottom>
           {t("history.needsConfiguration")}
         </Typography>
-        <Button
-          variant="outlined"
-          onClick={handleOpenSettings}
-          sx={{ mt: 2, textTransform: "none" }}
-        >
+        <Button variant="outlined" onClick={handleOpenSettings} sx={{ mt: 2 }}>
           {t("history.openSettings")}
         </Button>
       </Box>
@@ -127,7 +123,6 @@ export function HistoryList() {
                 variant="outlined"
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                sx={{ textTransform: "none" }}
               >
                 {isFetchingNextPage
                   ? t("history.loading")

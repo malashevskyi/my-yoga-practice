@@ -23,7 +23,6 @@ export function DefaultPresetsList({
         variant="outlined"
         onClick={() => setShowDefaultPresets(!showDefaultPresets)}
         fullWidth
-        sx={{ textTransform: "none" }}
       >
         {showDefaultPresets
           ? t("presets.hideDefaultPresets")

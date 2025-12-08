@@ -53,7 +53,6 @@ export function UserPresetsList({
           startIcon={<AddIcon />}
           fullWidth
           onClick={onCreatePreset}
-          sx={{ textTransform: "none" }}
         >
           {t("presets.create")}
         </Button>

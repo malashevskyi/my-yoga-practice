@@ -132,7 +132,6 @@ export function CreateVideoDialog({ open, onClose }: CreateVideoDialogProps) {
                 type="submit"
                 variant="contained"
                 disabled={isSubmitting || !isValid}
-                sx={{ textTransform: "none" }}
               >
                 {isSubmitting
                   ? t("createVideo.creating")

@@ -112,7 +112,6 @@ export function PresetsList() {
           startIcon={<AddIcon />}
           fullWidth
           onClick={() => setCreateDialogOpen(true)}
-          sx={{ textTransform: "none" }}
         >
           {t("presets.create")}
         </Button>

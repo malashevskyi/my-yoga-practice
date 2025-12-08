@@ -22,13 +22,28 @@ const darkThemeOptions: ThemeOptions = {
     },
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         root: {
-          backgroundColor: "rgba(255, 255, 255, 0.08)", // action.hover
+          backgroundColor: "rgba(255, 255, 255, 0.08)",
           "&:hover": {
-            backgroundColor: "rgba(255, 255, 255, 0.12)", // action.selected
+            backgroundColor: "rgba(255, 255, 255, 0.12)",
           },
+        },
+      },
+    },
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "4px", // MUI uses px for borderRadius: 1 = 4px
+          marginBottom: "4px",
         },
       },
     },

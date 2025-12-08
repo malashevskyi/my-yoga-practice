@@ -59,14 +59,7 @@ export function UserPresetListItem({
         </Box>
       }
     >
-      <ListItemButton
-        onClick={onSelect}
-        selected={isActive}
-        sx={{
-          borderRadius: 1,
-          mb: 0.5,
-        }}
-      >
+      <ListItemButton onClick={onSelect} selected={isActive}>
         <ListItemText
           primary={name}
           secondary={

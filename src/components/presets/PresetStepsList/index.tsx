@@ -65,16 +65,10 @@ export function PresetStepsList({
             startIcon={<LoopIcon />}
             onClick={() => setLoopDialogOpen(true)}
             disabled={steps.length === 0}
-            sx={{ textTransform: "none" }}
           >
             {t("presetSteps.loop")}
           </Button>
-          <Button
-            size="small"
-            startIcon={<AddIcon />}
-            onClick={onAddStep}
-            sx={{ textTransform: "none" }}
-          >
+          <Button size="small" startIcon={<AddIcon />} onClick={onAddStep}>
             {t("presetSteps.addStep")}
           </Button>
         </Box>

@@ -74,7 +74,6 @@ export function VideosList() {
           startIcon={<AddIcon />}
           fullWidth
           onClick={handleOpenCreateDialog}
-          sx={{ textTransform: "none" }}
         >
           {t("videos.addVideo")}
         </Button>
@@ -91,8 +90,6 @@ export function VideosList() {
               <ListItemButton
                 onClick={() => handleVideoClick(video)}
                 sx={{
-                  borderRadius: 1,
-                  mb: 0.5,
                   "&:hover": {
                     bgcolor: "action.hover",
                   },

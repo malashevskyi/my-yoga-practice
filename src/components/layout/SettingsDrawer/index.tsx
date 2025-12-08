@@ -228,7 +228,6 @@ export function SettingsDrawer() {
                     startIcon={
                       isSubmitting ? <CircularProgress size={20} /> : null
                     }
-                    sx={{ textTransform: "none" }}
                   >
                     {isSubmitting
                       ? t("settings.saving")
