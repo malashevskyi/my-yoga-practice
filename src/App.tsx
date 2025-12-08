@@ -10,10 +10,12 @@ import { CurrentTime } from "./components/timer/CurrentTime";
 import { TimerCarousel } from "./components/timer/TimerCarousel";
 import { TimerControls } from "./components/timer/TimerControls";
 import { GongPlayer } from "./components/audio/GongPlayer";
+import { OfflineStatusIndicator } from "./components/shared/OfflineStatusIndicator";
 import { useTimerEngine } from "./hooks/useTimerEngine";
 import { useFavoritePresetAutoload } from "./hooks/useFavoritePresetAutoload";
 import { useUserActivity } from "./hooks/useUserActivity";
 import { useAuthInit } from "./hooks/useAuthInit";
+import { usePendingTrackingSync } from "./hooks/usePendingTrackingSync";
 import { useTimerStore } from "./store/timerStore";
 import { useBrightnessStore } from "./store/brightnessStore";
 import { useAuthStore } from "./store/authStore";
@@ -34,12 +36,16 @@ function App() {
   // Track user activity to restore brightness
   useUserActivity();
 
+  // Sync pending tracking entries on load and when coming back online
+  usePendingTrackingSync();
+
   useMuiGhostFix('textarea[aria-hidden="true"].MuiInputBase-inputMultiline');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const gongToPlay = useTimerStore((state) => state.gongToPlay);
   const brightness = useBrightnessStore((state) => state.brightness);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const gongKey = useTimerStore((state) => state.gongKey);
 
   // Calculate opacity for dark theme (brightness affects text visibility)
   // brightness: 20 -> opacity: 0.5, brightness: 100 -> opacity: 1
@@ -61,6 +67,7 @@ function App() {
         }}
       />
       <Toaster />
+      <OfflineStatusIndicator />
       <Box
         sx={{
           display: "flex",
@@ -106,7 +113,7 @@ function App() {
         <TimerControls />
 
         {/* Gong Player (Hidden) */}
-        {gongToPlay && <GongPlayer src={gongToPlay} autoPlay />}
+        {gongToPlay && <GongPlayer key={gongKey} src={gongToPlay} autoPlay />}
       </Box>
     </ErrorBoundary>
   );

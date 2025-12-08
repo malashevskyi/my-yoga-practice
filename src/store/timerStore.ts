@@ -13,6 +13,7 @@ interface TimerStore {
   pausedTime: number; // Accumulated paused time
   gongToPlay: string | null; // URL of gong to play
   isTransitioning: boolean; // True during 3-second pause between timers
+  gongKey: number;
 
   // Actions
   setQueue: (steps: TimerStep[]) => void;
@@ -39,6 +40,7 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
   pausedTime: 0,
   gongToPlay: null,
   isTransitioning: false,
+  gongKey: 0,
 
   setQueue: (steps) => {
     set({
@@ -212,10 +214,11 @@ export const useTimerStore = create<TimerStore>((set, get) => ({
 
       // ALWAYS play gong first and mark as transitioning
       // Add timestamp to force new gong even if same file
-      const gongUrlWithTimestamp = `${gongUrl}?t=${Date.now()}`;
+      // const gongUrlWithTimestamp = `${gongUrl}?t=${Date.now()}`;
 
       set({
-        gongToPlay: gongUrlWithTimestamp,
+        gongToPlay: gongUrl,
+        gongKey: Date.now(),
         isTransitioning: true,
         timeLeft: 0, // Keep it at 0 during transition
       });

@@ -20,6 +20,7 @@ import { useSettingsStore } from "../../../store/settingsStore";
 import { useDrawerStore } from "../../../store/drawerStore";
 import { useAuthStore } from "../../../store/authStore";
 import { useUpdateUserSettings } from "../../../hooks/useUpdateUserSettings";
+import { OfflineWrapper } from "../../shared/OfflineWrapper";
 import {
   settingsValidationSchema,
   type SettingsFormValues,
@@ -199,43 +200,42 @@ export function SettingsDrawer() {
               {t("settings.trackingSettings")}
             </Typography>
 
-            <Formik
-              initialValues={initialValues}
-              validationSchema={settingsValidationSchema}
-              validateOnChange={true}
-              validateOnBlur={true}
-              onSubmit={handleSubmit}
-              enableReinitialize
-            >
-              {({ isSubmitting, isValid, dirty }) => (
-                <Form>
-                  <Box sx={{ mb: 2 }}>
-                    <ClockifyApiKeyField />
-                  </Box>
+            <OfflineWrapper fallbackMessage={t("offline.settings")}>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={settingsValidationSchema}
+                validateOnChange={true}
+                validateOnBlur={true}
+                onSubmit={handleSubmit}
+                enableReinitialize
+              >
+                {({ isSubmitting, isValid, dirty }) => (
+                  <Form>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    >
+                      <ClockifyApiKeyField />
+                      <ClockifyWorkspaceIdField />
 
-                  <Box sx={{ mb: 2 }}>
-                    <ClockifyWorkspaceIdField />
-                  </Box>
+                      <TrackingProjectNameField />
 
-                  <Box sx={{ mb: 2 }}>
-                    <TrackingProjectNameField />
-                  </Box>
-
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={isSubmitting || !isValid || !dirty}
-                    startIcon={
-                      isSubmitting ? <CircularProgress size={20} /> : null
-                    }
-                  >
-                    {isSubmitting
-                      ? t("settings.saving")
-                      : t("settings.saveProject")}
-                  </Button>
-                </Form>
-              )}
-            </Formik>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        disabled={isSubmitting || !isValid || !dirty}
+                        startIcon={
+                          isSubmitting ? <CircularProgress size={20} /> : null
+                        }
+                      >
+                        {isSubmitting
+                          ? t("settings.saving")
+                          : t("settings.saveProject")}
+                      </Button>
+                    </Box>
+                  </Form>
+                )}
+              </Formik>
+            </OfflineWrapper>
           </Box>
         </Box>
       </Drawer>

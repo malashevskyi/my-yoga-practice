@@ -17,18 +17,21 @@ export default defineConfig({
     }),
     VitePWA({
       registerType: "autoUpdate",
+      includeAssets: ["favicon/*", "assets/*", "gongs/*.mp3", "snowflake.svg"],
       manifest: {
-        name: "Yoga Timer",
-        short_name: "YogaTimer",
-        theme_color: "#ffffff",
+        name: "My Yoga Practice",
+        short_name: "My Yoga Practice",
+        description:
+          "Automated sequences, background time tracking, and gong sounds for a seamless, distraction-free yoga practice.",
+        theme_color: "#000000",
         icons: [
           {
-            src: "pwa-192x192.png",
+            src: "favicon/android-chrome-512x512.png",
             sizes: "192x192",
             type: "image/png",
           },
           {
-            src: "pwa-512x512.png",
+            src: "favicon/android-chrome-512x512.png",
             sizes: "512x512",
             type: "image/png",
           },

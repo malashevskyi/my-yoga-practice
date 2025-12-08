@@ -6,6 +6,7 @@ import { HistoryList } from "../../history/HistoryList";
 import { VideosList } from "../../videos/VideosList";
 import { useDrawerStore } from "../../../store/drawerStore";
 import { useAuthStore } from "../../../store/authStore";
+import { OfflineWrapper } from "../../shared/OfflineWrapper";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -88,12 +89,16 @@ export function AppDrawer() {
             <Box sx={{ overflowY: "auto" }}>
               {/* Videos Tab */}
               <TabPanel value={tabValue} index={0}>
-                <VideosList />
+                <OfflineWrapper fallbackMessage={t("offline.videos")}>
+                  <VideosList />
+                </OfflineWrapper>
               </TabPanel>
 
               {/* History Tab */}
               <TabPanel value={tabValue} index={1}>
-                <HistoryList />
+                <OfflineWrapper fallbackMessage={t("offline.history")}>
+                  <HistoryList />
+                </OfflineWrapper>
               </TabPanel>
             </Box>
           )}

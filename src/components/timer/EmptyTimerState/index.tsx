@@ -94,8 +94,10 @@ export function EmptyTimerState() {
     );
   }
 
+  const savedUserPresets = userPresets && userPresets.length > 0;
+
   // Authenticated user - error state
-  if (error) {
+  if (error && !savedUserPresets && !navigator.onLine) {
     return (
       <Box
         sx={{

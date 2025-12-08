@@ -139,7 +139,16 @@
     "preset3Name": "3x: 20 minutes kirtan & 20 minutes meditation"
   },
   "tracking": {
-    "trackError": "Failed to track time to Clockify"
+    "trackError": "Failed to track time to Clockify",
+    "queuedOffline": "Timer saved offline. Will sync when connection is restored.",
+    "syncSuccess": "Synced {{count}} timer(s) to Clockify"
+  },
+  "offline": {
+    "title": "You're Offline",
+    "defaultMessage": "This feature requires an internet connection. Please check your network and try again.",
+    "videos": "Videos are not available in offline mode. Please connect to the internet to manage your video library.",
+    "history": "History is not available in offline mode. Please connect to the internet to view your timer history.",
+    "settings": "Settings sync is not available in offline mode. Please connect to the internet to save your settings."
   },
   "errors": {
     "gongPlayError": "Failed to play gong sound",
